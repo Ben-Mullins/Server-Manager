@@ -24,6 +24,18 @@ namespace ServerProjectTracker.Models
         public string ProjectDescription { get; set; }
 
         /// <summary>
+        /// The title of the project
+        /// </summary>
+        [Required]
+        public string ProjectStudentOwners { get; set; }
+
+        /// <summary>
+        /// The title of the project
+        /// </summary>
+        [Required, MaxLength(250)]
+        public string ProjectInstructorOwner { get; set; }
+
+        /// <summary>
         /// The language the project is primarily written in
         /// </summary>
         [MaxLength(250)]
@@ -67,6 +79,6 @@ namespace ServerProjectTracker.Models
         /// This should hold the date of when the project was last started, so we can see how long the project has been running, this should be updated if the project server is restarted
         /// </summary>
         [DataType(DataType.DateTime)]
-        public DateTime? UpTimeDate { get; set; }
+        public DateTime? DockerUpTimeDate { get; set; }
     }
 }
