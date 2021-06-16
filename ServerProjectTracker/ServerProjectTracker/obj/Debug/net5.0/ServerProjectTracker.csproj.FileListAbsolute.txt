@@ -165,3 +165,4 @@ C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProject
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ref\ServerProjectTracker.dll
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ServerProjectTracker.pdb
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ServerProjectTracker.genruntimeconfig.cache
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\Index.cshtml.g.cs
