@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="AppLogic\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Pages\Components\" />
   </ItemGroup>
 
   <ItemGroup>

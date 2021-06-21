@@ -1,0 +1,45 @@
+﻿<div class="card">
+    <img class="card-img-top" src="@ImageLink" alt="@Title"/>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <h5>@Title</h5>
+            <h6>@Language</h6>
+        </div>
+        <p class="card-text">@Description</p>
+        <div class="d-flex justify-content-between" style="margin-bottom: 1em">
+            <div class="">
+                Added At: @AddTime.ToString("MM/dd/yyyy")
+            </div>
+            <div class="">
+                Added At: @UpdateTime.ToString("MM/dd/yyyy")
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="">
+                <a href="@ProjectDetailsLink" class="btn btn-primary">View Details</a>
+            </div>
+            <div class="">
+                <a href="@ProjectLink" class="btn btn-primary">Go To Project</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public string Description { get; set; }
+    [Parameter]
+    public string Language { get; set; }
+    [Parameter]
+    public DateTime AddTime { get; set; }
+    [Parameter]
+    public DateTime UpdateTime { get; set; }
+    [Parameter]
+    public string ImageLink { get; set; }
+    [Parameter]
+    public string ProjectLink { get; set; }
+    [Parameter]
+    public string ProjectDetailsLink { get; set; }
+}

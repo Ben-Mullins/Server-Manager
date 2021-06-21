@@ -12,8 +12,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /* Custom CSS is here */
 main {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding: 1.5rem 2.5rem;
 }
 
 .jumbotron {
@@ -28,7 +27,7 @@ main {
     background-color: #4B4945;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    margin-bottom: 1rem;
+    /*margin-bottom: 1.5rem;*/
 }
 
 .nav-row {
@@ -52,13 +51,28 @@ main {
     color: white;
 }
 
+.project-cards {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.project-cards > [class^="col"] {
+    margin: 1em 0;
+}
+
+.card {
+    color: white;
+    background-color: #4B4945;
+}
+
+
 /* End of custom CSS */
 
 a.navbar-brand {
-  white-space: normal;
-  color: white;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    color: white;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */
@@ -69,7 +83,18 @@ a {
 .btn-primary {
     color: #fff;
     background-color: #8446AC;
+    border-color: #663685;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #4B4945;
     border-color: #1861ac;
+}
+
+.btn-primary:hover {
+    background-color: #663685;
+    border-color: #663685;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
