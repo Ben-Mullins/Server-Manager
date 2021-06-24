@@ -1,0 +1,10 @@
+﻿@page "/Tracker/{ProjectId:int}"
+@model ServerProjectTracker.Pages.Tracker.DetailsModel
+@{
+    ViewData["Title"] = "Project Details";
+}
+
+<div>
+    <h1>@Model.Project.ProjectTitle</h1>
+    <h2>Project Details</h2>
+</div>

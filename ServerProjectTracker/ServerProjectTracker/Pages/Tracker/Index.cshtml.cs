@@ -9,6 +9,13 @@ namespace ServerProjectTracker.Pages.Tracker
 {
     public class IndexModel : PageModel
     {
+        private readonly Data.ServerProjectTrackerContext _context;
+
+        public IndexModel(Data.ServerProjectTrackerContext context)
+        {
+            _context = context;
+        }
+
         public void OnGet()
         {
         }

@@ -24,18 +24,6 @@ namespace ServerProjectTracker.Models
         public string ProjectDescription { get; set; }
 
         /// <summary>
-        /// The title of the project
-        /// </summary>
-        [Required]
-        public string ProjectStudentOwners { get; set; }
-
-        /// <summary>
-        /// The title of the project
-        /// </summary>
-        [Required, MaxLength(250)]
-        public string ProjectInstructorOwner { get; set; }
-
-        /// <summary>
         /// The language the project is primarily written in
         /// </summary>
         [MaxLength(250)]
@@ -74,6 +62,13 @@ namespace ServerProjectTracker.Models
         /// </summary>
         [DataType(DataType.Date), Required]
         public DateTime UpdatedDate { get; set; }
+
+        /// <summary>
+        /// This can be to filter on projects that are declared "dead", or for any other purpose that might come up.
+        /// This is NOT the Docker Container Status. That should be relegated to the API. 
+        /// </summary>
+        [MaxLength(50)]
+        public string ProjectStatus { get; set; }
 
         /// <summary>
         /// This should hold the date of when the project was last started, so we can see how long the project has been running, this should be updated if the project server is restarted
