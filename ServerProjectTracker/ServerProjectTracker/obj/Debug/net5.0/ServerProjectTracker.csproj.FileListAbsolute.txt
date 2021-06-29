@@ -172,3 +172,7 @@ C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProject
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\RazorDeclaration\ServerProjectTracker.dll
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Components\ProjectComponent.razor.g.cs
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\Details.cshtml.g.cs
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\EditProjectBasic.cshtml.g.cs
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\EditProjectSecurity.cshtml.g.cs
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\CreateProject.cshtml.g.cs
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Shared\_Layout-Index.cshtml.g.cs

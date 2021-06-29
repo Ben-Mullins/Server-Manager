@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ServerProjectTracker.Models
 {
+    /// <summary>
+    /// The Data Class associated with the Project table in the db
+    /// </summary>
     public class Project
     {
         [Required]
@@ -52,6 +55,11 @@ namespace ServerProjectTracker.Models
         public string ProjectLink { get; set; }
 
         /// <summary>
+        /// This is for storing the link for the project image link, or the default placeholder image link. 
+        /// </summary>
+        public string ProjectImageLink { get; set; }
+
+        /// <summary>
         /// The Date that the project was added
         /// </summary>
         [DataType(DataType.Date), Required]
@@ -62,18 +70,5 @@ namespace ServerProjectTracker.Models
         /// </summary>
         [DataType(DataType.Date), Required]
         public DateTime UpdatedDate { get; set; }
-
-        /// <summary>
-        /// This can be to filter on projects that are declared "dead", or for any other purpose that might come up.
-        /// This is NOT the Docker Container Status. That should be relegated to the API. 
-        /// </summary>
-        [MaxLength(50)]
-        public string ProjectStatus { get; set; }
-
-        /// <summary>
-        /// This should hold the date of when the project was last started, so we can see how long the project has been running, this should be updated if the project server is restarted
-        /// </summary>
-        [DataType(DataType.DateTime)]
-        public DateTime? DockerUpTimeDate { get; set; }
     }
 }

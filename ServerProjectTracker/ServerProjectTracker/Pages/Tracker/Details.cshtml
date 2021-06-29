@@ -5,6 +5,60 @@
 }
 
 <div>
-    <h1>@Model.Project.ProjectTitle</h1>
-    <h2>Project Details</h2>
+    <div class="row">
+    
+        @if(Model.AccessLevel == 0 || Model.AccessLevel == 1)
+        {
+            <div class="col-2" style="padding-top: 1.5rem">
+                <div class="card text-center">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">View</a></li>
+                        <li class="list-group-item"><a asp-page="/Tracker/EditProjectBasic" asp-route-ProjectId="@Model.Project.ProjectId">Edit Project</a></li>
+                        @if (Model.AccessLevel == 0)
+                        {
+                            <li class="list-group-item"><a asp-page="/Tracker/EditProjectSecurity" asp-route-ProjectId="@Model.Project.ProjectId">Security</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+        <div class="col-10">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h1>@Model.Project.ProjectTitle</h1>
+                    <h2 style="margin-bottom: 1rem">Project Details</h2>
+                </div>
+                <div>
+                    <p><b>Added On:</b> @Model.Project.AddedDate.ToString("MM/dd/yyyy") <b>Last Update:</b> @Model.Project.UpdatedDate.ToString("MM/dd/yyyy")</p>
+                    <div class="text-right">
+                        @if (Model.ProjectStatus == "Running")
+                        {
+                            <span class="badge badge-pill badge-success" style="font-size: 0.9em;">Running</span>
+                        }
+                        else if (Model.ProjectStatus == "Created")
+                        {
+                            <span class="badge badge-pill badge-Info" style="font-size: 0.9em;">Created</span>
+                        }
+                        else if (Model.ProjectStatus == "Exited")
+                        {
+                            <span class="badge badge-pill badge-warning" style="font-size: 0.9em;">Exited</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-pill badge-danger" style="font-size: 0.9em;">Unknown</span>
+                        }
+                        <a style="margin-left: 1em" class="btn btn-primary" href="@Model.Project.ProjectLink">View Project Page</a>
+                    </div>
+                </div>
+            </div>
+            
+            <p>@Model.Project.ProjectDescription</p>
+            <p>
+                <b>Project Language:</b> @Model.Project.ProjectLangauge <br/>
+                <b>Project Database:</b> @Model.Project.ProjectDatabase <br/>
+                <b>Project Backend: </b> @Model.Project.ProjectBackend <br/>
+                <b>Project Technology Misc:</b> @Model.Project.ProjectTechnologyMisc <br/>
+            </p>
+        </div>
+    </div>
 </div>
