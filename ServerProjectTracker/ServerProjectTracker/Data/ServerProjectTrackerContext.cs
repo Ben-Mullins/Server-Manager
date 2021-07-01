@@ -16,12 +16,14 @@ namespace ServerProjectTracker.Data
 
         public DbSet<Project> Project { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
 
         public DbSet<ProjectUsers> ProjectUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Project>()
+                .HasAlternateKey(p => p.ProjectTitle);
             modelBuilder.Entity<ProjectUsers>()
                 .HasKey(pu => new { pu.ProjectId, pu.UserId });
         }

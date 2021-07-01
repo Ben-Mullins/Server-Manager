@@ -43,9 +43,10 @@ namespace ServerProjectTracker.Models
 
         /// <summary>
         /// This should be a User's overall Access Level on the site. 
-        /// Level 0 is Global Full Access, and should be reserved to Server Admins only
-        /// Level 1 is Global View Access, and should be reserved for Admins (Per project access level is also set for allowing better access)
-        /// Level 2 is Per Project Access Only, and should be the default 
+        /// Level 0 is Global Ownership Access, and should be reserved to Server Admins only (Full Access to all projects)
+        /// Level 1 is Global Developer Access, and should be reserved for Server Admin Developers only (Partial Access to all projects)
+        /// Level 2 is Global View Access, and should be reserved for Admins (Per project access level is also set for allowing better access)
+        /// Level 3 is Per Project Access Only, and should be the default 
         /// </summary>
         [Required]
         public int UserAccessLevel { get; set; }

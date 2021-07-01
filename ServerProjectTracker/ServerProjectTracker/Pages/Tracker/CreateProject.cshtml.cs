@@ -18,9 +18,6 @@ namespace ServerProjectTracker.Pages.Tracker
             _context = context;
         }
 
-        [BindProperty]
-        public Project Project { get; set; }
-
         [BindProperty, Required, MaxLength(250)]
         public string ProjectTitle { get; set; }
 

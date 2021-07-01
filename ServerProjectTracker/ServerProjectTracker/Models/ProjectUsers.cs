@@ -30,10 +30,15 @@ namespace ServerProjectTracker.Models
         public DateTime AccessGrantedDate { get; set; }
 
         /// <summary>
-        /// If the access level was changed at one point, this date would indicate when it was last changed. 
+        /// If access level is changed after initial access being granted, the new date will be reflected here 
         /// </summary>
-        [DataType(DataType.DateTime), Required]
-        public DateTime AccessUpdatedDate { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime? AccessUpdatedDate { get; set; }
+
+        /// <summary>
+        /// The Id associated with the User who granted the current access level
+        /// </summary>
+        public int? AccessGranterUserId { get; set; }
 
         public virtual Project Project { get; set; }
 

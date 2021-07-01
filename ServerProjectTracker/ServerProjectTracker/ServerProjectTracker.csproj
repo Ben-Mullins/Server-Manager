@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AppLogic\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

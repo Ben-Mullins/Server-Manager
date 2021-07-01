@@ -46,7 +46,7 @@ namespace ServerProjectTracker.Pages.Tracker
             Project.UpdatedDate = new DateTime();
             Project.ProjectLink = $"http://localhost/{ProjectId}";
             Project.ProjectImageLink = "/images/placeholder.jpg";
-            ProjectStatus = "Active";
+            ProjectStatus = "Running";
             AccessLevel = 0;
         }
     }

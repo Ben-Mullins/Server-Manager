@@ -3,3 +3,67 @@
 @{
     ViewData["Title"] = "Edit Project Details";
 }
+
+<div class="row">
+    <div class="col-2" style="padding-top: 1.5rem">
+        <div class="card text-center">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                <li class="list-group-item"><a asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">Project Details</a></li>
+                <li class="list-group-item"><a asp-page="/Tracker/EditProjectBasic" asp-route-ProjectId="@Model.Project.ProjectId">Edit Project</a></li>
+                @if (Model.AccessLevel == 0)
+                {
+                    <li class="list-group-item"><a asp-page="/Tracker/EditProjectSecurity" asp-route-ProjectId="@Model.Project.ProjectId">Security</a></li>
+                }
+                <li class="list-group-item"><a asp-page="/Tracker/Index">Tracker Home</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-10">
+        <h1>Edit Project Details</h1>
+        <div class="col-md-6">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="ProjectTitle" class="control-label">Title</label>
+                    <input asp-for="ProjectTitle" class="form-control" type="text" required />
+                    <span asp-validation-for="ProjectTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectDescription" class="control-label">Description</label>
+                    <textarea asp-for="ProjectDescription" class="form-control" required></textarea>
+                    <span asp-validation-for="ProjectDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectLangauge" class="control-label">Primary Programming Language</label>
+                    <input asp-for="ProjectLangauge" class="form-control" type="text" required />
+                    <span asp-validation-for="ProjectLangauge" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectDatabase" class="control-label">Database</label>
+                    <input asp-for="ProjectDatabase" class="form-control" type="text" required placeholder="SQLite" />
+                    <span asp-validation-for="ProjectDatabase" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectBackend" class="control-label">Project Backend</label>
+                    <input asp-for="ProjectBackend" class="form-control" type="text" required placeholder=".Net Core 5.0" />
+                    <span asp-validation-for="ProjectBackend" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectTechnologyMisc" class="control-label">Project Technology Miscellaneous</label>
+                    <input asp-for="ProjectTechnologyMisc" class="form-control" type="text" required placeholder="Technology Stack like LAMP" />
+                    <span asp-validation-for="ProjectTechnologyMisc" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectLink" class="control-label">CS Project Server Link</label>
+                    <input asp-for="ProjectLink" class="form-control" type="url" placeholder="http:csprojects.weber.edu/[Project Title]" />
+                    <small class="form-text text-muted">Once you know the link for the project on the server (The docker container link), you can give the link to it here.</small>
+                    <span asp-validation-for="ProjectLink" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a class="btn btn-danger" asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
