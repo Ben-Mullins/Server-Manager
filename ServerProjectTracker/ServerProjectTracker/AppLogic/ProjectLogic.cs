@@ -26,7 +26,8 @@ namespace ServerProjectTracker.AppLogic
         /// <param name="ProjectBackend">The backend used by the project</param>
         /// <param name="ProjectTechnologyMisc">Any other technology used by the project</param>
         /// <param name="ProjectLink">The link for the project on the server</param>
-        public void CreateProject(int UserId, string ProjectTitle, string ProjectDescription, string ProjectLangauge = null, string ProjectDatabase = null, string ProjectBackend = null, string ProjectTechnologyMisc = null, string ProjectLink = null)
+        /// <param name="DockerId">The id of the Docker Container</param>
+        public void CreateProject(int UserId, string ProjectTitle, string ProjectDescription, string ProjectLangauge = null, string ProjectDatabase = null, string ProjectBackend = null, string ProjectTechnologyMisc = null, string ProjectLink = null, string DockerId = null)
         {
             var project = _context.Project.FirstOrDefault(p => p.ProjectTitle == ProjectTitle);
             if (project != null) throw new Exception("Error: That Project Title is already in use");
@@ -40,6 +41,7 @@ namespace ServerProjectTracker.AppLogic
             newProject.ProjectBackend = ProjectBackend;
             newProject.ProjectTechnologyMisc = ProjectTechnologyMisc;
             newProject.ProjectLink = ProjectLink;
+            newProject.DockerId = DockerId;
             newProject.AddedDate = DateTime.Now;
             newProject.UpdatedDate = DateTime.Now;
 
@@ -52,7 +54,7 @@ namespace ServerProjectTracker.AppLogic
             security.SetNewProjectOwner(newProject.ProjectId, UserId);
         }
 
-        public void UpdateProject(int UserId, int ProjectId, string ProjectTitle, string ProjectDescription, string ProjectLangauge = null, string ProjectDatabase = null, string ProjectBackend = null, string ProjectTechnologyMisc = null, string ProjectLink = null)
+        public void UpdateProject(int UserId, int ProjectId, string ProjectTitle, string ProjectDescription, string ProjectLangauge = null, string ProjectDatabase = null, string ProjectBackend = null, string ProjectTechnologyMisc = null, string ProjectLink = null, string DockerId = null)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
 
@@ -61,7 +63,7 @@ namespace ServerProjectTracker.AppLogic
             var security = new ProjectSecurityLogic(_context);
             var access = security.DetermineAccessLevel(ProjectId, UserId);
 
-            if (access != 0 || access != 1) throw new Exception("Error: Cannot update, User has insufficient privileges"); //User must be owner or developer
+            if (access < 0 || access > 1) throw new Exception("Error: Cannot update, User has insufficient privileges"); //User must be owner or developer
 
             project.ProjectTitle = ProjectTitle;
             project.ProjectDescription = ProjectDescription;
@@ -70,6 +72,7 @@ namespace ServerProjectTracker.AppLogic
             project.ProjectBackend = ProjectBackend;
             project.ProjectTechnologyMisc = ProjectTechnologyMisc;
             project.ProjectLink = ProjectLink;
+            project.DockerId = DockerId;
             project.UpdatedDate = DateTime.Now;
 
             _context.SaveChanges();

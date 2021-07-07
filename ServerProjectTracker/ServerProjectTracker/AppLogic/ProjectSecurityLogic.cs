@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ServerProjectTracker.Models;
 
 namespace ServerProjectTracker.AppLogic
@@ -53,6 +54,8 @@ namespace ServerProjectTracker.AppLogic
         /// <param name="OwnerId"></param>
         public void GrantOwnershipAccess(int ProjectId, int UserId, int OwnerId)
         {
+            if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
+            
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
@@ -87,6 +90,8 @@ namespace ServerProjectTracker.AppLogic
 
         public void GrantDeveloperAccess(int ProjectId, int UserId, int OwnerId)
         {
+            if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
+
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
@@ -121,6 +126,8 @@ namespace ServerProjectTracker.AppLogic
 
         public void GrantViewerAccess(int ProjectId, int UserId, int OwnerId)
         {
+            if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
+
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
@@ -155,6 +162,8 @@ namespace ServerProjectTracker.AppLogic
 
         public void RevokeAccess(int ProjectId, int UserId, int OwnerId)
         {
+            if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
+
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
@@ -180,7 +189,7 @@ namespace ServerProjectTracker.AppLogic
         /// </summary>
         /// <param name="ProjectId">The Id of the project in question</param>
         /// <param name="UserId">The Id of the User in question</param>
-        /// <returns>The integer value level of access, 3 being no access</returns>
+        /// <returns>The integer value level of access, 3 or higher being no access</returns>
         public int DetermineAccessLevel(int ProjectId, int UserId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
@@ -198,5 +207,93 @@ namespace ServerProjectTracker.AppLogic
 
             return accessLevel;
         }
+
+        /// <summary>
+        /// This is a method for getting a string version of a User's overall access level on a given project
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <param name="UserId"></param>
+        /// <returns>A string label for an access level</returns>
+        public string DetermineAccessString(int ProjectId, int UserId)
+        {
+            Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+
+            if (project == null || user == null) throw new Exception("Error: unable to find user or project");
+
+            ProjectUsers projectUser = _context.ProjectUsers.Where(pu => pu.ProjectId == ProjectId).FirstOrDefault(pu => pu.UserId == UserId);
+
+            int accessLevel = user.UserAccessLevel;
+            if (projectUser != null)
+            {
+                if (accessLevel > projectUser.AccessLevel && projectUser.AccessLevel >= 0) accessLevel = projectUser.AccessLevel; //If project access level is better (0 - 2) than global, but not negative
+            }
+
+            switch (accessLevel)
+            {
+                case (0):
+                    return "Owner";
+                case (1):
+                    return "Developer";
+                case (2):
+                    return "Viewer";
+                default:
+                    return "None";
+            }
+        }
+
+        public List<Project> DetermineViewableProjects(int UserId)
+        {
+            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            if (user == null) throw new Exception("Error: unable to find user");
+
+            if(user.UserAccessLevel <= 2 && user.UserAccessLevel >= 0) //User has global view access or better
+            {
+                return _context.Project.ToList();
+            }
+
+            List<Project> projects = new List<Project>();
+
+            var projectUsers = _context.ProjectUsers.Include(p => p.Project).Where(p => p.UserId == user.UserId).ToList();
+
+            foreach (var pu in projectUsers)
+            {
+                if(pu.AccessLevel >= 0 && pu.AccessLevel < 3)
+                    projects.Add(pu.Project);
+            }
+
+            return projects;
+        }
+    }
+
+    /// <summary>
+    /// This is a data support class for Security logic which organizes data necessary for manipulating project security data
+    /// </summary>
+    public class ProjectAccessRule
+    {
+        /// <summary>
+        /// The User to be granted access
+        /// </summary>
+        public User User { get; set; }
+
+        /// <summary>
+        /// The User who granted the user their current access level, can be null
+        /// </summary>
+        public User AccessGranter { get; set; }
+
+        /// <summary>
+        /// The actual numerical value of access level of the rule
+        /// </summary>
+        public int AccessLevel { get; set; }
+
+        /// <summary>
+        /// The date that original access was granted
+        /// </summary>
+        public DateTime AccessGrantedDate { get; set; }
+
+        /// <summary>
+        /// If access level was changed, this reflects the time of the last change
+        /// </summary>
+        public DateTime? AccessUpdatedDate { get; set; }
     }
 }

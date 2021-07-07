@@ -27,6 +27,11 @@ namespace ServerProjectTracker
         {
             services.AddRazorPages();
 
+            //Add Session Services
+            services.AddSession();
+            services.AddMemoryCache();
+            services.AddMvc();
+
             services.AddDbContext<ServerProjectTrackerContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ServerProjectTrackerContext")));
         }
@@ -47,6 +52,9 @@ namespace ServerProjectTracker
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            //Session Config
+            app.UseSession();
 
             app.UseRouting();
 

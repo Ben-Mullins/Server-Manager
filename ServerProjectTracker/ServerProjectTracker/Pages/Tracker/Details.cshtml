@@ -12,7 +12,10 @@
             <div class="col-2" style="padding-top: 1.5rem">
                 <div class="card text-center">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                        @if(Model.Project.ProjectLink != null && Model.Project.ProjectLink != "")
+                        {
+                            <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                        }
                         <li class="list-group-item"><a asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">Project Details</a></li>
                         <li class="list-group-item"><a asp-page="/Tracker/EditProjectBasic" asp-route-ProjectId="@Model.Project.ProjectId">Edit Project</a></li>
                         @if (Model.AccessLevel == 0)

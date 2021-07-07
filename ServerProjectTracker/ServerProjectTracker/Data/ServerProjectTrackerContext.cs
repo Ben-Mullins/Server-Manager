@@ -22,6 +22,8 @@ namespace ServerProjectTracker.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(u => u.Username);
             modelBuilder.Entity<Project>()
                 .HasAlternateKey(p => p.ProjectTitle);
             modelBuilder.Entity<ProjectUsers>()

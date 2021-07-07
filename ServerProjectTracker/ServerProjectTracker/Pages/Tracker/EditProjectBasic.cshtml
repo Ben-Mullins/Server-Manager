@@ -8,7 +8,10 @@
     <div class="col-2" style="padding-top: 1.5rem">
         <div class="card text-center">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                @if (Model.Project.ProjectLink != null && Model.Project.ProjectLink != "")
+                {
+                    <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                }
                 <li class="list-group-item"><a asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">Project Details</a></li>
                 <li class="list-group-item"><a asp-page="/Tracker/EditProjectBasic" asp-route-ProjectId="@Model.Project.ProjectId">Edit Project</a></li>
                 @if (Model.AccessLevel == 0)
@@ -27,7 +30,7 @@
                 <div class="form-group">
                     <label asp-for="ProjectTitle" class="control-label">Title</label>
                     <input asp-for="ProjectTitle" class="form-control" type="text" required />
-                    <span asp-validation-for="ProjectTitle" class="text-danger"></span>
+                    <span asp-validation-for="ProjectTitle" class="text-danger">@Model.TitleError</span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ProjectDescription" class="control-label">Description</label>
@@ -36,22 +39,22 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ProjectLangauge" class="control-label">Primary Programming Language</label>
-                    <input asp-for="ProjectLangauge" class="form-control" type="text" required />
+                    <input asp-for="ProjectLangauge" class="form-control" type="text" />
                     <span asp-validation-for="ProjectLangauge" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ProjectDatabase" class="control-label">Database</label>
-                    <input asp-for="ProjectDatabase" class="form-control" type="text" required placeholder="SQLite" />
+                    <input asp-for="ProjectDatabase" class="form-control" type="text" placeholder="SQLite" />
                     <span asp-validation-for="ProjectDatabase" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ProjectBackend" class="control-label">Project Backend</label>
-                    <input asp-for="ProjectBackend" class="form-control" type="text" required placeholder=".Net Core 5.0" />
+                    <input asp-for="ProjectBackend" class="form-control" type="text" placeholder=".Net Core 5.0" />
                     <span asp-validation-for="ProjectBackend" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ProjectTechnologyMisc" class="control-label">Project Technology Miscellaneous</label>
-                    <input asp-for="ProjectTechnologyMisc" class="form-control" type="text" required placeholder="Technology Stack like LAMP" />
+                    <input asp-for="ProjectTechnologyMisc" class="form-control" type="text" placeholder="Technology Stack like LAMP" />
                     <span asp-validation-for="ProjectTechnologyMisc" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -59,6 +62,12 @@
                     <input asp-for="ProjectLink" class="form-control" type="url" placeholder="http:csprojects.weber.edu/[Project Title]" />
                     <small class="form-text text-muted">Once you know the link for the project on the server (The docker container link), you can give the link to it here.</small>
                     <span asp-validation-for="ProjectLink" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DockerId" class="control-label">Docker Container Id</label>
+                    <input asp-for="DockerId" class="form-control" type="text" />
+                    <span asp-validation-for="DockerId" class="text-danger"></span>
+                    <small class="form-text text-muted">Once the project has a live Docker Container, enter it's Id here. It will be used to retrieve data from the Docker API</small>
                 </div>
 
                 <button type="submit" class="btn btn-success">Save Changes</button>

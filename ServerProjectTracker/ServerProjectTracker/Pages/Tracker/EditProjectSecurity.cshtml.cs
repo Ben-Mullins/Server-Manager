@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ServerProjectTracker.AppLogic;
 using ServerProjectTracker.Models;
 
 namespace ServerProjectTracker.Pages.Tracker
@@ -20,6 +21,9 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public Project Project { get; set; }
 
+        [BindProperty]
+        public int UserId { get; set; }
+
         /// <summary>
         /// 0 - Full
         /// 1 - Partial
@@ -28,16 +32,26 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public int AccessLevel { get; set; }
 
-        /// <summary>
-        /// People who reach this page must have access level 0
-        /// </summary>
-        /// <param name="ProjectId"></param>
-        public void OnGet(int ProjectId)
+        public List<ProjectAccessRule> ProjectAccessRules { get; set; }
+
+        public List<ProjectAccessRule> RevokedAccessRules { get; set; }
+
+        public IActionResult OnGet(int ProjectId)
         {
-            Project = new Project();
-            Project.ProjectId = ProjectId;
-            Project.ProjectTitle = "Placeholder Title " + ProjectId;
-            Project.ProjectLink = $"http://localhost/{ProjectId}";
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
+            Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            if (Project == null) return RedirectToPage("/Tracker/Index");
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
+            if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
+
+            if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
+
+            return Page();
         }
     }
 }

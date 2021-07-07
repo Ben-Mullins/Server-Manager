@@ -27,6 +27,11 @@ namespace ServerProjectTracker.Models
         public string ProjectDescription { get; set; }
 
         /// <summary>
+        /// The id used by Docker to identify a container, to allow the tracker to connect a project to the docker id using the API
+        /// </summary>
+        public string DockerId { get; set; }
+
+        /// <summary>
         /// The language the project is primarily written in
         /// </summary>
         [MaxLength(250)]

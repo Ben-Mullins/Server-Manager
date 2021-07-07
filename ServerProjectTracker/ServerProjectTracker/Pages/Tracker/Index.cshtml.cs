@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ServerProjectTracker.AppLogic;
+using ServerProjectTracker.Models;
 
 namespace ServerProjectTracker.Pages.Tracker
 {
@@ -16,8 +18,23 @@ namespace ServerProjectTracker.Pages.Tracker
             _context = context;
         }
 
-        public void OnGet()
+        [BindProperty]
+        public int UserAccessLevel { get; set; }
+
+        public List<Project> ProjectList { get; set; }
+
+        public IActionResult OnGet()
         {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
+            UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            ProjectList = security.DetermineViewableProjects((int)userId);
+
+            return Page();
         }
     }
 }

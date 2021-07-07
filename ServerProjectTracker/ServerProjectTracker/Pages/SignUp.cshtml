@@ -1,0 +1,46 @@
+﻿@page
+@model ServerProjectTracker.Pages.SignUpModel
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_Layout-Index";
+}
+
+<div>
+    <h1>Sign Up</h1>
+
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Username" class="control-label">Username</label>
+                <input asp-for="Username" class="form-control" type="text" required />
+                <span asp-validation-for="Username" class="text-danger">@Model.UserError</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label>
+                <input asp-for="Password" class="form-control Password" type="password" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input asp-for="ConfirmPassword" class="form-control ConfirmPassword" type="password" required />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <div class="text-danger"></div>
+            </div>
+            <div>
+                <span class="text-danger">@Model.ConfirmError</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Users.Firstname" class="control-label">First Name</label>
+                <input asp-for="Users.Firstname" class="form-control" required />
+                <span asp-validation-for="Users.Firstname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Users.Lastname" class="control-label">Last Name</label>
+                <input asp-for="Users.Lastname" class="form-control" required />
+                <span asp-validation-for="Users.Lastname" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+            <a class="btn btn-secondary" asp-page="Index">Cancel</a>
+        </form>
+    </div>
+</div>
