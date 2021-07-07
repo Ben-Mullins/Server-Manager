@@ -20,8 +20,15 @@
         </div>
     </div>
     <div class="col-10">
-        <h1>@Model.Project.ProjectTitle</h1>
-        <h2 style="margin-bottom: 1rem">Project Security</h2>
+        <div class="d-flex justify-content-between">
+            <div>
+                <h1>@Model.Project.ProjectTitle</h1>
+                <h2 style="margin-bottom: 1rem">Project Security</h2>
+            </div>
+            <div>
+
+            </div>
+        </div>
 
         <table class="table table-striped">
             <thead>
@@ -31,6 +38,7 @@
                     <th scope="col">Access Update Date</th>
                     <th scope="col">Access Granter</th>
                     <th scope="col">Access Level</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -41,36 +49,85 @@
                     <td>@rule.AccessGrantedDate.ToString("MM/dd/yyyy")</td>
                     <td>
                         @if (rule.AccessUpdatedDate != null) { 
-                        <div>@((DateTime)rule.AccessUpdatedDate).ToString("MM/dd/yyyy")</div> 
+                        <div>@(((DateTime)rule.AccessUpdatedDate).ToString("MM/dd/yyyy h:mm tt"))</div> 
                         }
                         else
                         {
                         <div>N/A</div>
                         }
                     </td>
-                    <td>@rule.AccessGranter.Username</td>
                     <td>
-                        @if (Model.UserId == rule.User.UserId)
+                        @if (rule.AccessGranter != null)
                         {
-                            <select class="form-control" disabled>
-                                <option selected='@rule.AccessLevel == 1 ? "selected" : "false"' value="1">Developer</option>
-                                <option selected='@rule.AccessLevel == 0 ? "selected" : "false"' value="0">Owner</option>
-                                <option selected='@rule.AccessLevel == 2 ? "selected" : "false"' value="2">Viewer</option>
-                            </select>
+                            <div>@rule.AccessGranter.Username</div>
                         }
                         else
                         {
-                            <select class="form-control">
-                                <option value="0">Owner</option>
-                                <option value="1">Developer</option>
-                                <option value="2">Viewer</option>
-                            </select>
+                            <div>N/A</div>
                         }
+                    </td>
+                    <td>
+                        @rule.AccessString
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            @if (Model.UserId != rule.User.UserId)
+                            {
+                                if (rule.AccessLevel >= 0)
+                                {
+                                    if (rule.AccessLevel > 0 && rule.AccessLevel < 2)
+                                    {
+                                        <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
+                                            <button class="btn btn-primary" type="submit">Improve Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden/>
+                                        </form>
+                                        <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit">Reduce Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden />
+                                        </form>
+                                    }
+                                    else if (rule.AccessLevel > 0)
+                                    {
+                                        <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
+                                            <button class="btn btn-primary" type="submit">Improve Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden/>
+                                        </form>
+                                        <form style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit" disabled>Reduce Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden />
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit" disabled>Improve Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden/>
+                                        </form>
+                                        <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit">Reduce Access</button>
+                                            <input name="UserId" value="@rule.User.UserId" hidden />
+                                        </form>
+                                    }
 
+                                    <form method="post" asp-page-handler="RevokeAccess">
+                                        <button class="btn btn-danger" type="submit">Revoke Access</button>
+                                        <input name="UserId" value="@rule.User.UserId" hidden/>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="ReturnAccess">
+                                        <button class="btn btn-danger" type="submit">Return Access</button>
+                                        <input name="UserId" value="@rule.User.UserId" hidden/>
+                                    </form>
+                                }
+                            }
+                        </div>
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
+        <a asp-page="/Tracker/AddSecurityUser" asp-route-ProjectId="@Model.Project.ProjectId" class="btn btn-primary">Add new user</a>
     </div>
 </div>

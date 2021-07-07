@@ -24,6 +24,9 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public int UserId { get; set; }
 
+        [BindProperty]
+        public int EditedUserId { get; set; }
+
         /// <summary>
         /// 0 - Full
         /// 1 - Partial
@@ -34,9 +37,34 @@ namespace ServerProjectTracker.Pages.Tracker
 
         public List<ProjectAccessRule> ProjectAccessRules { get; set; }
 
-        public List<ProjectAccessRule> RevokedAccessRules { get; set; }
-
         public IActionResult OnGet(int ProjectId)
+        {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+            UserId = (int)userId; 
+
+            Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            if (Project == null) return RedirectToPage("/Tracker/Index");
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
+            if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
+
+            if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
+
+            //Load Access Rules
+            ProjectAccessRules = security.GetAccessRules(ProjectId);
+
+            return Page();
+        }
+
+        public IActionResult OnPost(int ProjectId)
+        {
+            return RedirectToPage("/Tracker/EditProjectSecurity", new { ProjectId });
+        }
+
+        public IActionResult OnPostUpAccess(int ProjectId, int UserId)
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
@@ -51,7 +79,93 @@ namespace ServerProjectTracker.Pages.Tracker
 
             if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
 
-            return Page();
+            int currentAccess = security.GetAccessLevel(ProjectId, UserId);
+
+            switch (currentAccess)
+            {
+                case (1):
+                    security.GrantOwnershipAccess(ProjectId, UserId, (int)userId);
+                    break;
+                case (2):
+                    security.GrantDeveloperAccess(ProjectId, UserId, (int)userId);
+                    break;
+                default:
+                    break;
+            }
+
+            return RedirectToPage("/Tracker/EditProjectSecurity", new { ProjectId });
+        }
+
+        public IActionResult OnPostDownAccess(int ProjectId, int UserId)
+        {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
+            Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            if (Project == null) return RedirectToPage("/Tracker/Index");
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
+            if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
+
+            if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
+
+            int currentAccess = security.GetAccessLevel(ProjectId, UserId);
+
+            switch (currentAccess)
+            {
+                case (0):
+                    security.GrantDeveloperAccess(ProjectId, UserId, (int)userId);
+                    break;
+                case (1):
+                    security.GrantViewerAccess(ProjectId, UserId, (int)userId);
+                    break;
+                default:
+                    break;
+            }
+
+            return RedirectToPage("/Tracker/EditProjectSecurity", new { ProjectId });
+        }
+
+        public IActionResult OnPostRevokeAccess(int ProjectId, int UserId)
+        {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
+            Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            if (Project == null) return RedirectToPage("/Tracker/Index");
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
+            if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
+
+            if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
+
+            security.RevokeAccess(ProjectId, UserId, (int)userId);
+
+            return RedirectToPage("/Tracker/EditProjectSecurity", new { ProjectId });
+        }
+
+        public IActionResult OnPostReturnAccess(int ProjectId, int UserId)
+        {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
+            Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            if (Project == null) return RedirectToPage("/Tracker/Index");
+
+            ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
+
+            AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
+            if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
+
+            if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
+
+            security.GrantViewerAccess(ProjectId, UserId, (int)userId);
+
+            return RedirectToPage("/Tracker/EditProjectSecurity", new { ProjectId });
         }
     }
 }

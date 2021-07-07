@@ -1,0 +1,65 @@
+﻿@page "/Tracker/{ProjectId:int}/Security/New"
+@model ServerProjectTracker.Pages.Tracker.AddSecurityUserModel
+@{
+    ViewData["Title"] = "New Project User";
+}
+
+<div class="row">
+    <div class="col-2" style="padding-top: 1.5rem">
+        <div class="card text-center">
+            <ul class="list-group list-group-flush">
+                @if (Model.Project.ProjectLink != null && Model.Project.ProjectLink != "")
+                {
+                    <li class="list-group-item"><a href="@Model.Project.ProjectLink">Project Page</a></li>
+                }
+                <li class="list-group-item"><a asp-page="/Tracker/Details" asp-route-ProjectId="@Model.Project.ProjectId">Project Details</a></li>
+                <li class="list-group-item"><a asp-page="/Tracker/EditProjectBasic" asp-route-ProjectId="@Model.Project.ProjectId">Edit Project</a></li>
+                <li class="list-group-item"><a asp-page="/Tracker/EditProjectSecurity" asp-route-ProjectId="@Model.Project.ProjectId">Security</a></li>
+                <li class="list-group-item"><a asp-page="/Tracker/Index">Tracker Home</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h1>@Model.Project.ProjectTitle</h1>
+                <h2 style="margin-bottom: 1rem">Project Security</h2>
+            </div>
+            <div>
+
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="NewUser" class="control-label">Username</label>
+                    <input asp-for="NewUser" id="userName" class="form-control" type="text" required />
+                    <span asp-validation-for="NewUser" class="text-danger">@Model.UserError</span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NewAccessLevel" class="control-label">Username</label>
+                    <select class="form-control" asp-for="NewAccessLevel" required>
+                        <option value="">Select Access Level</option>
+                        <option value="0">Owner</option>
+                        <option value="1">Developer</option>
+                        <option value="2">Viewer</option>
+                    </select>
+                    <span asp-validation-for="NewAccessLevel" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <a class="btn btn-secondary" asp-page="/Tracker/EditProjectSecurity" asp-route-ProjectId="@Model.Project.ProjectId">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#userName').autocomplete({
+            source: '@Url.Page("/Tracker/AddSecurityUser", "search")'
+        })
+    })
+</script>

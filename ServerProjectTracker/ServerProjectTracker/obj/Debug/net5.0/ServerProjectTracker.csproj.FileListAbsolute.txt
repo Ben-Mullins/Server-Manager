@@ -178,3 +178,4 @@ C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProject
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Shared\_Layout-Index.cshtml.g.cs
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\SignUp.cshtml.g.cs
 C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Signout.cshtml.g.cs
+C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\Razor\Pages\Tracker\AddSecurityUser.cshtml.g.cs

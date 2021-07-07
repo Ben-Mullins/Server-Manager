@@ -88,6 +88,12 @@ namespace ServerProjectTracker.AppLogic
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Used to grant developer access rights
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="OwnerId"></param>
         public void GrantDeveloperAccess(int ProjectId, int UserId, int OwnerId)
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
@@ -124,6 +130,13 @@ namespace ServerProjectTracker.AppLogic
             _context.SaveChanges();
         }
 
+
+        /// <summary>
+        /// Used to grant viewer access level
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="OwnerId"></param>
         public void GrantViewerAccess(int ProjectId, int UserId, int OwnerId)
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
@@ -160,6 +173,12 @@ namespace ServerProjectTracker.AppLogic
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Used to revoke access rights to a project
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="OwnerId"></param>
         public void RevokeAccess(int ProjectId, int UserId, int OwnerId)
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
@@ -208,13 +227,7 @@ namespace ServerProjectTracker.AppLogic
             return accessLevel;
         }
 
-        /// <summary>
-        /// This is a method for getting a string version of a User's overall access level on a given project
-        /// </summary>
-        /// <param name="ProjectId"></param>
-        /// <param name="UserId"></param>
-        /// <returns>A string label for an access level</returns>
-        public string DetermineAccessString(int ProjectId, int UserId)
+        public int GetAccessLevel(int ProjectId, int UserId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
@@ -223,25 +236,14 @@ namespace ServerProjectTracker.AppLogic
 
             ProjectUsers projectUser = _context.ProjectUsers.Where(pu => pu.ProjectId == ProjectId).FirstOrDefault(pu => pu.UserId == UserId);
 
-            int accessLevel = user.UserAccessLevel;
-            if (projectUser != null)
-            {
-                if (accessLevel > projectUser.AccessLevel && projectUser.AccessLevel >= 0) accessLevel = projectUser.AccessLevel; //If project access level is better (0 - 2) than global, but not negative
-            }
-
-            switch (accessLevel)
-            {
-                case (0):
-                    return "Owner";
-                case (1):
-                    return "Developer";
-                case (2):
-                    return "Viewer";
-                default:
-                    return "None";
-            }
+            return projectUser.AccessLevel;
         }
 
+        /// <summary>
+        /// Used to get a list of viable projects, intended for use by the tracker dashboard
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public List<Project> DetermineViewableProjects(int UserId)
         {
             User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
@@ -263,6 +265,78 @@ namespace ServerProjectTracker.AppLogic
             }
 
             return projects;
+        }
+
+        /// <summary>
+        /// Generates a list of Access Rules for a given project for use on the project security page
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <returns></returns>
+        public List<ProjectAccessRule> GetAccessRules(int ProjectId)
+        {
+            Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+
+            if (project == null) throw new Exception("Error: unable to find project");
+
+            List<ProjectAccessRule> projectAccessRules = new List<ProjectAccessRule>();
+            var projectUsers = _context.ProjectUsers.Include(p => p.User).Where(p => p.ProjectId == ProjectId).ToList();
+
+            foreach (var pjusr in projectUsers)
+            {
+                var AccessGranter = _context.User.FirstOrDefault(u => u.UserId == pjusr.AccessGranterUserId);
+                string AccessString = "";
+
+                switch (pjusr.AccessLevel)
+                {
+                    case (0):
+                        AccessString = "Owner";
+                        break;
+                    case (1):
+                        AccessString = "Developer";
+                        break;
+                    case (2):
+                        AccessString = "Viewer";
+                        break;
+                    default:
+                        AccessString = "Revoked";
+                        break;
+                }
+
+                projectAccessRules.Add(new ProjectAccessRule(pjusr.User, AccessGranter, pjusr.AccessLevel, AccessString, pjusr.AccessGrantedDate, pjusr.AccessUpdatedDate));
+            }
+
+            return projectAccessRules;
+        }
+
+        /// <summary>
+        /// A method for getting a list of users who could be added to a project that are not already
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <returns></returns>
+        public List<string> GetPotentialNewUsers(int ProjectId)
+        {
+            Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+
+            if (project == null) throw new Exception("Error: unable to find project");
+
+            var userList = _context.User.ToList();
+            var projectUserList = _context.ProjectUsers.Where(p => p.ProjectId == ProjectId);
+            List<int> projectUserIds = new List<int>();
+
+            foreach (var user in projectUserList)
+            {
+                projectUserIds.Add(user.UserId);
+            }
+
+            List<string> usernames = new List<string>();
+
+            foreach (var user in userList)
+            {
+                var has = projectUserIds.FindIndex(u => u == user.UserId);
+                if (has == -1) usernames.Add(user.Username);
+            }
+
+            return usernames;
         }
     }
 
@@ -287,6 +361,11 @@ namespace ServerProjectTracker.AppLogic
         public int AccessLevel { get; set; }
 
         /// <summary>
+        /// A string representation of the access level
+        /// </summary>
+        public string AccessString { get; set; }
+
+        /// <summary>
         /// The date that original access was granted
         /// </summary>
         public DateTime AccessGrantedDate { get; set; }
@@ -295,5 +374,15 @@ namespace ServerProjectTracker.AppLogic
         /// If access level was changed, this reflects the time of the last change
         /// </summary>
         public DateTime? AccessUpdatedDate { get; set; }
+
+        public ProjectAccessRule(User user, User accessGranter, int accessLevel, string accessString, DateTime accessGranted, DateTime? accessUpdated)
+        {
+            User = user;
+            AccessGranter = accessGranter;
+            AccessLevel = accessLevel;
+            AccessString = accessString;
+            AccessGrantedDate = accessGranted;
+            AccessUpdatedDate = accessUpdated;
+        }
     }
 }
