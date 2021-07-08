@@ -78,7 +78,7 @@
                                     if (rule.AccessLevel > 0 && rule.AccessLevel < 2)
                                     {
                                         <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
-                                            <button class="btn btn-primary" type="submit">Improve Access</button>
+                                            <button class="btn btn-primary" type="submit">Elevate Access</button>
                                             <input name="UserId" value="@rule.User.UserId" hidden/>
                                         </form>
                                         <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
@@ -89,7 +89,7 @@
                                     else if (rule.AccessLevel > 0)
                                     {
                                         <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
-                                            <button class="btn btn-primary" type="submit">Improve Access</button>
+                                            <button class="btn btn-primary" type="submit">Elevate Access</button>
                                             <input name="UserId" value="@rule.User.UserId" hidden/>
                                         </form>
                                         <form style="padding-right: 12px">
@@ -100,7 +100,7 @@
                                     else
                                     {
                                         <form style="padding-right: 12px">
-                                            <button class="btn btn-secondary" type="submit" disabled>Improve Access</button>
+                                            <button class="btn btn-secondary" type="submit" disabled>Elevate Access</button>
                                             <input name="UserId" value="@rule.User.UserId" hidden/>
                                         </form>
                                         <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
