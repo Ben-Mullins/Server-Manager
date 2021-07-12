@@ -26,6 +26,7 @@ namespace ServerProjectTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddControllers();
 
             //Add Session Services
             services.AddSession();
@@ -63,6 +64,7 @@ namespace ServerProjectTracker
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }
