@@ -13,3 +13,4 @@ time_sucks/time_sucks.csproj.user
 .vscode/
 time_sucks/obj/Debug/
 .env
+ServerProjectTracker/ServerProjectTracker/appsettings.json
