@@ -36,7 +36,7 @@ namespace ServerProjectTracker.Pages
         public string UserError { get; set; }
 
         [BindProperty]
-        public User Users { get; set; }
+        public Users Users { get; set; }
 
         public void OnGet()
         {
@@ -44,7 +44,7 @@ namespace ServerProjectTracker.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var existingUser = _context.User.FirstOrDefault(u => u.Username == Username);
+            var existingUser = _context.Users.FirstOrDefault(u => u.Username == Username);
             var error = false;
 
             if (existingUser != null)
@@ -64,10 +64,10 @@ namespace ServerProjectTracker.Pages
             Users.Password = Encryptor.encryptPass(Password);
             Users.UserAccessLevel = 3;
 
-            _context.User.Add(Users);
+            _context.Users.Add(Users);
             await _context.SaveChangesAsync();
 
-            var user = _context.User.FirstOrDefault(u => u.Username == Username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == Username);
             Session.setUser(HttpContext.Session, user);
 
             return RedirectToPage("/Tracker/Index");

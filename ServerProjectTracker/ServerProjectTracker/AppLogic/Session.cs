@@ -9,7 +9,7 @@ namespace ServerProjectTracker.AppLogic
 {
     public static class Session
     {
-        public static void setUser(this ISession session, User user)
+        public static void setUser(this ISession session, Users user)
         {
             session.SetInt32("UserId", user.UserId);
             session.SetInt32("UserAccess", user.UserAccessLevel);

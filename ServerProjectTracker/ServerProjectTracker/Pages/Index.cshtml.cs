@@ -45,7 +45,7 @@ namespace ServerProjectTracker.Pages
         {
             string password = Encryptor.encryptPass(Password);
 
-            var User = await _context.User.Where(u => u.Username == Username).FirstOrDefaultAsync(u => u.Password == password);
+            var User = await _context.Users.Where(u => u.Username == Username).FirstOrDefaultAsync(u => u.Password == password);
 
             if (User == null)
             {

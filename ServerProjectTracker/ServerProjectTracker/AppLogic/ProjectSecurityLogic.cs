@@ -28,7 +28,7 @@ namespace ServerProjectTracker.AppLogic
         public void SetNewProjectOwner(int ProjectId, int UserId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (project == null || user == null) throw new Exception("Error: unable to find user or project");
 
@@ -56,7 +56,7 @@ namespace ServerProjectTracker.AppLogic
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
             
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
 
@@ -98,7 +98,7 @@ namespace ServerProjectTracker.AppLogic
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
 
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
 
@@ -141,7 +141,7 @@ namespace ServerProjectTracker.AppLogic
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
 
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
 
@@ -183,7 +183,7 @@ namespace ServerProjectTracker.AppLogic
         {
             if (UserId == OwnerId) throw new Exception("Error: Cannot modify own access level");
 
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (user == null) throw new Exception("Error: unable to find user by Id");
 
@@ -212,7 +212,7 @@ namespace ServerProjectTracker.AppLogic
         public int DetermineAccessLevel(int ProjectId, int UserId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (project == null || user == null) throw new Exception("Error: unable to find user or project");
 
@@ -230,7 +230,7 @@ namespace ServerProjectTracker.AppLogic
         public int GetAccessLevel(int ProjectId, int UserId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
 
             if (project == null || user == null) throw new Exception("Error: unable to find user or project");
 
@@ -246,7 +246,7 @@ namespace ServerProjectTracker.AppLogic
         /// <returns></returns>
         public List<Project> DetermineViewableProjects(int UserId)
         {
-            User user = _context.User.FirstOrDefault(u => u.UserId == UserId);
+            Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
             if (user == null) throw new Exception("Error: unable to find user");
 
             if(user.UserAccessLevel <= 2 && user.UserAccessLevel >= 0) //User has global view access or better
@@ -283,7 +283,7 @@ namespace ServerProjectTracker.AppLogic
 
             foreach (var pjusr in projectUsers)
             {
-                var AccessGranter = _context.User.FirstOrDefault(u => u.UserId == pjusr.AccessGranterUserId);
+                var AccessGranter = _context.Users.FirstOrDefault(u => u.UserId == pjusr.AccessGranterUserId);
                 string AccessString = "";
 
                 switch (pjusr.AccessLevel)
@@ -319,7 +319,7 @@ namespace ServerProjectTracker.AppLogic
 
             if (project == null) throw new Exception("Error: unable to find project");
 
-            var userList = _context.User.ToList();
+            var userList = _context.Users.ToList();
             var projectUserList = _context.ProjectUsers.Where(p => p.ProjectId == ProjectId);
             List<int> projectUserIds = new List<int>();
 
@@ -348,12 +348,12 @@ namespace ServerProjectTracker.AppLogic
         /// <summary>
         /// The User to be granted access
         /// </summary>
-        public User User { get; set; }
+        public Users User { get; set; }
 
         /// <summary>
         /// The User who granted the user their current access level, can be null
         /// </summary>
-        public User AccessGranter { get; set; }
+        public Users AccessGranter { get; set; }
 
         /// <summary>
         /// The actual numerical value of access level of the rule
@@ -375,7 +375,7 @@ namespace ServerProjectTracker.AppLogic
         /// </summary>
         public DateTime? AccessUpdatedDate { get; set; }
 
-        public ProjectAccessRule(User user, User accessGranter, int accessLevel, string accessString, DateTime accessGranted, DateTime? accessUpdated)
+        public ProjectAccessRule(Users user, Users accessGranter, int accessLevel, string accessString, DateTime accessGranted, DateTime? accessUpdated)
         {
             User = user;
             AccessGranter = accessGranter;

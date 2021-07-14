@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ServerProjectTracker.Models
 {
-    public class User
+    public class Users
     {
-        [Required]
+        [Key]
         public int UserId { get; set; }
         
         /// <summary>
