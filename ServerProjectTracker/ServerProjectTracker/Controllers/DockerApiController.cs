@@ -5,8 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Runtime.InteropServices;
 
 namespace ServerProjectTracker.Controllers
 {
@@ -20,9 +19,20 @@ namespace ServerProjectTracker.Controllers
         [HttpGet]
         public async Task<List<Models.Container>> GetAsync()
         {
-            DockerClient client = new DockerClientConfiguration(
-                new Uri("npipe://./pipe/docker_engine"))
-                 .CreateClient();
+            DockerClient client;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                client = new DockerClientConfiguration(
+                    new Uri("npipe://./pipe/docker_engine"))
+                     .CreateClient();
+            }
+            else
+            {
+                client = new DockerClientConfiguration(
+                    new Uri("unix:///var/run/docker.sock"))
+                     .CreateClient();
+            }
 
             IList<ContainerListResponse> containers = await client.Containers.ListContainersAsync(
                 new ContainersListParameters()
