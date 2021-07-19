@@ -86,7 +86,7 @@ namespace ServerProjectTracker.Pages.Tracker
                 return Page();
             }
 
-            User newUser = _context.User.FirstOrDefault(u => u.Username == NewUser);
+            Users newUser = _context.Users.FirstOrDefault(u => u.Username == NewUser);
 
             switch (NewAccessLevel)
             {

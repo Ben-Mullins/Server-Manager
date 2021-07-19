@@ -42,6 +42,6 @@ namespace ServerProjectTracker.Models
 
         public virtual Project Project { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual Users User { get; set; }
     }
 }

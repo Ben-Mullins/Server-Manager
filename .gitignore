@@ -41,3 +41,4 @@ ServerProjectTracker/ServerProjectTracker/obj/ServerProjectTracker.csproj.nuget.
 ServerProjectTracker/ServerProjectTracker/obj/ServerProjectTracker.csproj.nuget.g.props
 ServerProjectTracker/ServerProjectTracker/ServerProjectTracker.csproj
 ServerProjectTracker/ServerProjectTracker/ServerProjectTracker.csproj.user
+ServerProjectTracker/ServerProjectTracker/appsettings.json
