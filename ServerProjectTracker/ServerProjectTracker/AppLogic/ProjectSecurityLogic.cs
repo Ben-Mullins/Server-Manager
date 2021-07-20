@@ -219,6 +219,8 @@ namespace ServerProjectTracker.AppLogic
             ProjectUsers projectUser = _context.ProjectUsers.Where(pu => pu.ProjectId == ProjectId).FirstOrDefault(pu => pu.UserId == UserId);
 
             int accessLevel = user.UserAccessLevel;
+            if (accessLevel > 4) return accessLevel; //Their access has been entirely revoked
+
             if(projectUser != null)
             {
                 if (accessLevel > projectUser.AccessLevel && projectUser.AccessLevel >= 0) accessLevel = projectUser.AccessLevel; //If project access level is better (0 - 2) than global, but not negative
@@ -248,6 +250,8 @@ namespace ServerProjectTracker.AppLogic
         {
             Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
             if (user == null) throw new Exception("Error: unable to find user");
+
+            if (user.UserAccessLevel > 4) return new List<Project>();
 
             if(user.UserAccessLevel <= 2 && user.UserAccessLevel >= 0) //User has global view access or better
             {

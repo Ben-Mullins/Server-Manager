@@ -36,7 +36,7 @@ namespace ServerProjectTracker.Pages
         public string UserError { get; set; }
 
         [BindProperty]
-        public Users Users { get; set; }
+        public Models.Users Users { get; set; }
 
         public void OnGet()
         {

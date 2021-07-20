@@ -1,0 +1,35 @@
+﻿@page  "/Profile"
+@model ServerProjectTracker.Pages.User.EditUserModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div>
+    <h1>User Profile</h1>
+    <h2>@Model.Users.Username</h2><br />
+
+    <h3>Basic Information</h3>
+    <form method="post" class="form-inline">
+        <label class="" asp-for="Firstname" style="margin-right: 1em">First Name</label>
+        <input type="text" class="form-control" asp-for="Firstname" style="margin-right: 1em" required />
+
+        <label class="" asp-for="Lastname" style="margin-right: 1em">Last Name</label>
+        <input type="text" class="form-control" asp-for="Lastname" style="margin-right: 1em" required />
+
+        <button type="submit" class="btn btn-primary" asp-page-handler="Basic">Update</button>
+    </form><br />
+
+    <h3>Password</h3>
+    <form method="post"  class="form-inline">
+        <label class="" asp-for="Password" style="margin-right: 1em">Password</label>
+        <input type="password" class="form-control" asp-for="Password" style="margin-right: 1em" required />
+
+        <label class="" asp-for="ConfirmPassword" style="margin-right: 1em">Confirm</label>
+        <input type="password" class="form-control" asp-for="ConfirmPassword" style="margin-right: 1em" required />
+        
+        <button type="submit" class="btn btn-primary" asp-page-handler="Pass">Update</button>
+    </form>
+    <div>
+        <span class="text-danger">@Model.ConfirmError</span>
+    </div>
+</div>

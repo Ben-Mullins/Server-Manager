@@ -1,0 +1,119 @@
+﻿@page "/Security"
+@model ServerProjectTracker.Pages.User.UserSecurityModel
+@{
+    ViewData["Title"] = "User Security";
+}
+
+<div>
+    <h1>User Security</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Access Level</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <th scope="row">@user.Username</th>
+                    <td>
+                        @switch (user.UserAccessLevel)
+                        {
+                            case (0):
+                                <span>Global Owner</span>
+                                break;
+                            case (1):
+                                <span>Global Developer</span>
+                                break;
+                            case (2):
+                                <span>Global Viewer</span>
+                                break;
+                            case (3):
+                                <span>Default Access</span>
+                                break;
+                            case (4):
+                                <span>Pending/Limited Access</span>
+                                break;
+                            case (5):
+                                <span>Rejected/Revoked Access</span>
+                                break;
+                            default:
+                                <span>Error</span>
+                                break;
+                        }
+
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            @if (Model.UserId != user.UserId)
+                            {
+                                if (user.UserAccessLevel < 4)
+                                {
+                                    if (user.UserAccessLevel > 0 && user.UserAccessLevel < 4)
+                                    {
+                                        <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
+                                            <button class="btn btn-primary" type="submit">Elevate Access</button>
+                                            <input name="UserId" value="user.UserId" hidden />
+                                        </form>
+                                        <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit">Reduce Access</button>
+                                            <input name="UserId" value="user.UserId" hidden />
+                                        </form>
+                                    }
+                                    else if (user.UserAccessLevel > 0)
+                                    {
+                                        <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
+                                            <button class="btn btn-primary" type="submit">Elevate Access</button>
+                                            <input name="UserId" value="user.UserId" hidden />
+                                        </form>
+                                        <form style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit" disabled>Reduce Access</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit" disabled>Elevate Access</button>
+                                        </form>
+                                        <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
+                                            <button class="btn btn-secondary" type="submit">Reduce Access</button>
+                                            <input name="UserId" value="user.UserId" hidden />
+                                        </form>
+                                    }
+
+                                    <form method="post" asp-page-handler="RevokeAccess">
+                                        <button class="btn btn-danger" type="submit">Revoke Access</button>
+                                        <input name="UserId" value="@user.UserId" hidden />
+                                    </form>
+                                }
+                                else if (user.UserAccessLevel == 4)
+                                {
+                                    <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
+                                        <button class="btn btn-primary" type="submit">Accept Access</button>
+                                        <input name="UserId" value="user.UserId" hidden />
+                                    </form>
+                                    <form method="post" asp-page-handler="RevokeAccess">
+                                        <button class="btn btn-danger" type="submit">Reject Access</button>
+                                        <input name="UserId" value="@user.UserId" hidden />
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="UpAccess">
+                                        <button class="btn btn-danger" type="submit">Return Access</button>
+                                        <input name="UserId" value="@user.UserId" hidden />
+                                    </form>
+                                }
+
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
