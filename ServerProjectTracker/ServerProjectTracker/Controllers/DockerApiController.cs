@@ -47,7 +47,8 @@ namespace ServerProjectTracker.Controllers
                     Id = container.ID,
                     Name = container.Names[0],
                     Created = container.Created,
-                    Status = container.Status
+                    Status = container.Status,
+                    State = container.State
                 };
                 containersList.Add(c);
             }
