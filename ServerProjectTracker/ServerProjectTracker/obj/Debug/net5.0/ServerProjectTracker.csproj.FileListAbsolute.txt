@@ -360,3 +360,4 @@ C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectT
 C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ref\ServerProjectTracker.dll
 C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ServerProjectTracker.pdb
 C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ServerProjectTracker.genruntimeconfig.cache
+C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectTracker\ServerProjectTracker\obj\Debug\net5.0\ServerProjectTracker.csproj.AssemblyReference.cache
