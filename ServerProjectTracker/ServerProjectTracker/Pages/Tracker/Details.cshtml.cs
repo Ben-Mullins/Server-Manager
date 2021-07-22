@@ -24,6 +24,9 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public string ProjectStatus { get; set; }
 
+        [BindProperty]
+        public string ProjectState { get; set; }
+
         /// <summary>
         /// 0 - Full
         /// 1 - Partial
@@ -46,7 +49,7 @@ namespace ServerProjectTracker.Pages.Tracker
             if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
 
             //The following data is placeholder, and should be removed once we have actual project data
-            ProjectStatus = "Running";
+            ProjectState = "running";
 
             return Page();
         }

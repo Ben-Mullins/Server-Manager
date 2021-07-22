@@ -36,17 +36,33 @@
                 <div>
                     <p><b>Added On:</b> @Model.Project.AddedDate.ToString("MM/dd/yyyy") <b>Last Update:</b> @Model.Project.UpdatedDate.ToString("MM/dd/yyyy")</p>
                     <div class="text-right">
-                        @if (Model.ProjectStatus == "Running")
+                        @if (Model.ProjectState == "running")
                         {
                             <span class="badge badge-pill badge-success" style="font-size: 0.9em; height: 1.75em">Running</span>
                         }
-                        else if (Model.ProjectStatus == "Created")
+                        else if (Model.ProjectState == "created")
                         {
-                            <span class="badge badge-pill badge-Info" style="font-size: 0.9em; height: 1.75em">Created</span>
+                            <span class="badge badge-pill badge-info" style="font-size: 0.9em; height: 1.75em">Created</span>
                         }
-                        else if (Model.ProjectStatus == "Exited")
+                        else if (Model.ProjectState == "restarting")
+                        {
+                            <span class="badge badge-pill badge-info" style="font-size: 0.9em; height: 1.75em">Restarting</span>
+                        }
+                        else if (Model.ProjectState == "exited")
                         {
                             <span class="badge badge-pill badge-warning" style="font-size: 0.9em; height: 1.75em">Exited</span>
+                        }
+                        else if (Model.ProjectState == "paused")
+                        {
+                            <span class="badge badge-pill badge-warning" style="font-size: 0.9em; height: 1.75em">Paused</span>
+                        }
+                        else if (Model.ProjectState == "removing")
+                        {
+                            <span class="badge badge-pill badge-danger" style="font-size: 0.9em; height: 1.75em">Removing</span>
+                        }
+                        else if (Model.ProjectState == "dead")
+                        {
+                            <span class="badge badge-pill badge-danger" style="font-size: 0.9em; height: 1.75em">Dead</span>
                         }
                         else
                         {
