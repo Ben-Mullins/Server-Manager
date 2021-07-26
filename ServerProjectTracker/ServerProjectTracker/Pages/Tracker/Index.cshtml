@@ -40,8 +40,11 @@
     {
         <p>It looks like you don't currently have access to any projects right now</p>
     }
-
-    @if (Model.UserAccessLevel > 4)
+    @if (Model.UserAccessLevel == 4)
+    {
+        <p>Your access is currently pending</p>
+    }
+    else if (Model.UserAccessLevel > 4)
     {
         <p>Your access has been revoked</p>
     }

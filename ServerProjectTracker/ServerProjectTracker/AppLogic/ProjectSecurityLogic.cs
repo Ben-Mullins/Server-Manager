@@ -219,7 +219,7 @@ namespace ServerProjectTracker.AppLogic
             ProjectUsers projectUser = _context.ProjectUsers.Where(pu => pu.ProjectId == ProjectId).FirstOrDefault(pu => pu.UserId == UserId);
 
             int accessLevel = user.UserAccessLevel;
-            if (accessLevel > 4) return accessLevel; //Their access has been entirely revoked
+            if (accessLevel >= 4) return accessLevel; //Their access has been entirely revoked or is pending
 
             if(projectUser != null)
             {
@@ -251,7 +251,7 @@ namespace ServerProjectTracker.AppLogic
             Users user = _context.Users.FirstOrDefault(u => u.UserId == UserId);
             if (user == null) throw new Exception("Error: unable to find user");
 
-            if (user.UserAccessLevel > 4) return new List<Project>();
+            if (user.UserAccessLevel >= 4) return new List<Project>(); //Access is pending or rejected for the user
 
             if(user.UserAccessLevel <= 2 && user.UserAccessLevel >= 0) //User has global view access or better
             {
@@ -317,11 +317,13 @@ namespace ServerProjectTracker.AppLogic
         /// </summary>
         /// <param name="ProjectId"></param>
         /// <returns></returns>
-        public List<string> GetPotentialNewUsers(int ProjectId)
+        public List<string> GetPotentialNewUsers(int ProjectId, int OwnerId)
         {
             Project project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
+            Users Owner = _context.Users.FirstOrDefault(u => u.UserId == OwnerId);
 
-            if (project == null) throw new Exception("Error: unable to find project");
+            if (project == null || Owner == null) throw new Exception("Error: unable to find project or the Owner");
+            if (DetermineAccessLevel(ProjectId, OwnerId) != 0) throw new Exception("OwnerId does not have owner access");
 
             var userList = _context.Users.ToList();
             var projectUserList = _context.ProjectUsers.Where(p => p.ProjectId == ProjectId);
@@ -337,7 +339,7 @@ namespace ServerProjectTracker.AppLogic
             foreach (var user in userList)
             {
                 var has = projectUserIds.FindIndex(u => u == user.UserId);
-                if (has == -1) usernames.Add(user.Username);
+                if (has == -1 && user.UserId != OwnerId) usernames.Add(user.Username);
             }
 
             return usernames;

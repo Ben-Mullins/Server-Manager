@@ -50,6 +50,7 @@ namespace ServerProjectTracker.Pages.Tracker
 
             //The following data is placeholder, and should be removed once we have actual project data
             ProjectState = "running";
+            ProjectStatus = "Exited (255) 21 minutes ago";
 
             return Page();
         }

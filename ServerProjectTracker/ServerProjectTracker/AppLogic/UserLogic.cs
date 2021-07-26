@@ -33,6 +33,8 @@ namespace ServerProjectTracker.AppLogic
 
             if (user.UserAccessLevel <= 0) throw new Exception("Error: Cannot further elevate access");
 
+            if(user.UserAccessLevel == 5) user.UserAccessLevel -= 1; //Do it a second time so that they return to standard access level (not pending)
+
             user.UserAccessLevel -= 1;
             _context.SaveChanges();
         }
@@ -53,7 +55,7 @@ namespace ServerProjectTracker.AppLogic
 
             if (origin.UserAccessLevel != 0) throw new Exception("Error: Origin lacks sufficient access");
 
-            if (user.UserAccessLevel >= 4) throw new Exception("Error: Cannot further reduce access, revoke access instead");
+            if (user.UserAccessLevel >= 3) throw new Exception("Error: Cannot further reduce access, revoke access instead");
 
             user.UserAccessLevel += 1;
             _context.SaveChanges();

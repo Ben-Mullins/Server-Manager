@@ -29,7 +29,7 @@ namespace ServerProjectTracker.Pages.User
 
             UserId = (int)userId;
 
-            //if (accessLevel != 0) return RedirectToPage("/Tracker/Index");
+            if (accessLevel != 0) return RedirectToPage("/Tracker/Index");
 
             Users = _context.Users.OrderBy(u => u.UserAccessLevel).ToList();
 
@@ -38,7 +38,7 @@ namespace ServerProjectTracker.Pages.User
 
         public IActionResult OnPost()
         {
-            return RedirectToPage("/Users/UserSecurity");
+            return RedirectToPage("/User/UserSecurity");
         }
 
         public IActionResult OnPostUpAccess(int UserId)
@@ -51,7 +51,7 @@ namespace ServerProjectTracker.Pages.User
             var security = new UserLogic(_context);
             security.ElevateAccess(UserId, (int)userId);
 
-            return RedirectToPage("/Users/UserSecurity");
+            return RedirectToPage("/User/UserSecurity");
         }
 
         public IActionResult OnPostDownAccess(int UserId)
@@ -64,7 +64,7 @@ namespace ServerProjectTracker.Pages.User
             var security = new UserLogic(_context);
             security.ReduceAccess(UserId, (int)userId);
 
-            return RedirectToPage("/Users/UserSecurity");
+            return RedirectToPage("/User/UserSecurity");
         }
 
         public IActionResult OnPostRevokeAccess(int UserId)
@@ -77,7 +77,7 @@ namespace ServerProjectTracker.Pages.User
             var security = new UserLogic(_context);
             security.RevokeAccess(UserId, (int)userId);
 
-            return RedirectToPage("/Users/UserSecurity");
+            return RedirectToPage("/User/UserSecurity");
         }
     }
 }

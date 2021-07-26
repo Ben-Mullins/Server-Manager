@@ -36,6 +36,8 @@
                 <div>
                     <p><b>Added On:</b> @Model.Project.AddedDate.ToString("MM/dd/yyyy") <b>Last Update:</b> @Model.Project.UpdatedDate.ToString("MM/dd/yyyy")</p>
                     <div class="text-right">
+                        <span style="padding-right: 1em">@Model.ProjectStatus</span>
+
                         @if (Model.ProjectState == "running")
                         {
                             <span class="badge badge-pill badge-success" style="font-size: 0.9em; height: 1.75em">Running</span>

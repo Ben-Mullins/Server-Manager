@@ -36,7 +36,7 @@
                                 <span>Default Access</span>
                                 break;
                             case (4):
-                                <span>Pending/Limited Access</span>
+                                <span>Pending Access</span>
                                 break;
                             case (5):
                                 <span>Rejected/Revoked Access</span>
@@ -53,22 +53,22 @@
                             {
                                 if (user.UserAccessLevel < 4)
                                 {
-                                    if (user.UserAccessLevel > 0 && user.UserAccessLevel < 4)
+                                    if (user.UserAccessLevel > 0 && user.UserAccessLevel < 3)
                                     {
                                         <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
                                             <button class="btn btn-primary" type="submit">Elevate Access</button>
-                                            <input name="UserId" value="user.UserId" hidden />
+                                            <input name="UserId" value="@user.UserId" hidden />
                                         </form>
                                         <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
                                             <button class="btn btn-secondary" type="submit">Reduce Access</button>
-                                            <input name="UserId" value="user.UserId" hidden />
+                                            <input name="UserId" value="@user.UserId" hidden />
                                         </form>
                                     }
                                     else if (user.UserAccessLevel > 0)
                                     {
                                         <form method="post" asp-page-handler="UpAccess" style="padding-right: 12px">
                                             <button class="btn btn-primary" type="submit">Elevate Access</button>
-                                            <input name="UserId" value="user.UserId" hidden />
+                                            <input name="UserId" value="@user.UserId" hidden />
                                         </form>
                                         <form style="padding-right: 12px">
                                             <button class="btn btn-secondary" type="submit" disabled>Reduce Access</button>
@@ -81,7 +81,7 @@
                                         </form>
                                         <form method="post" asp-page-handler="DownAccess" style="padding-right: 12px">
                                             <button class="btn btn-secondary" type="submit">Reduce Access</button>
-                                            <input name="UserId" value="user.UserId" hidden />
+                                            <input name="UserId" value="@user.UserId" hidden />
                                         </form>
                                     }
 
