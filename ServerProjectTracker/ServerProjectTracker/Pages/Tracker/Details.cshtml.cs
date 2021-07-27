@@ -35,7 +35,7 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public int AccessLevel { get; set; }
 
-        public IActionResult OnGet(int ProjectId)
+        public async Task<IActionResult> OnGetAsync(int ProjectId)
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
@@ -48,9 +48,18 @@ namespace ServerProjectTracker.Pages.Tracker
             AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
             if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
 
-            //The following data is placeholder, and should be removed once we have actual project data
-            ProjectState = "running";
-            ProjectStatus = "Exited (255) 21 minutes ago";
+            if(Project.DockerId != null)
+            {
+                var list = await DockerApi.GetListAsync();
+                var container = list.Find(c => c.Id == Project.DockerId);
+                ProjectState = container.State;
+                ProjectStatus = container.Status;
+            }
+            else
+            {
+                ProjectState = "nocontainer";
+                ProjectStatus = "No Set Docker Container";
+            }
 
             return Page();
         }

@@ -58,6 +58,10 @@
                         {
                             <span class="badge badge-pill badge-warning" style="font-size: 0.9em; height: 1.75em">Paused</span>
                         }
+                        else if (Model.ProjectState == "nocontainer")
+                        {
+                            <span class="badge badge-pill badge-warning" style="font-size: 0.9em; height: 1.75em">N/A</span>
+                        }
                         else if (Model.ProjectState == "removing")
                         {
                             <span class="badge badge-pill badge-danger" style="font-size: 0.9em; height: 1.75em">Removing</span>
