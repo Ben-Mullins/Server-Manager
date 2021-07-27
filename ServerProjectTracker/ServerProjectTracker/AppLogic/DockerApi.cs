@@ -1,24 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Docker.DotNet;
+using Docker.DotNet.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Docker.DotNet;
-using Docker.DotNet.Models;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
-namespace ServerProjectTracker.Controllers
+namespace ServerProjectTracker.AppLogic
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DockerApiController : ControllerBase
+    static public class DockerApi
     {
-        List<Models.Container> ContainersList = new();
-        DockerClient client;
+        static List<Models.Container> ContainersList = new();
+        static DockerClient client;
 
-        // GET: api/<DockerAPIController>
-        [HttpGet]
-        public async Task<List<Models.Container>> GetAsync()
+        static public async Task<List<Models.Container>> GetListAsync()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -54,30 +49,5 @@ namespace ServerProjectTracker.Controllers
 
             return ContainersList;
         }
-
-        //// GET api/<DockerApiController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<DockerApiController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<DockerApiController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<DockerApiController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
