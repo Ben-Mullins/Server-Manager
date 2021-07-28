@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ServerProjectTracker.AppLogic
 {
-    static public class DockerApi
+    public class DockerApi
     {
-        static List<Models.Container> ContainersList = new();
-        static DockerClient client;
+        List<Models.Container> ContainersList = new();
+        DockerClient client;
 
-        static public async Task<List<Models.Container>> GetListAsync()
+        public async Task<List<Models.Container>> GetListAsync()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
