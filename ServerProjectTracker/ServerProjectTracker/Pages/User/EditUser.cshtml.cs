@@ -41,6 +41,9 @@ namespace ServerProjectTracker.Pages.User
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
 
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
+
             Users = _context.Users.FirstOrDefault(u => u.UserId == userId);
             Firstname = Users.Firstname;
             Lastname = Users.Lastname;
@@ -57,6 +60,8 @@ namespace ServerProjectTracker.Pages.User
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             Users = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
@@ -71,6 +76,8 @@ namespace ServerProjectTracker.Pages.User
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             Users = _context.Users.FirstOrDefault(u => u.UserId == userId);
             Firstname = Users.Firstname;

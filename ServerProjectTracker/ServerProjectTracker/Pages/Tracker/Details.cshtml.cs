@@ -40,6 +40,9 @@ namespace ServerProjectTracker.Pages.Tracker
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
 
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
+
             Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
             if (Project == null) return RedirectToPage("/Tracker/Index");
 
@@ -50,10 +53,18 @@ namespace ServerProjectTracker.Pages.Tracker
 
             if(Project.DockerId != null)
             {
-                var list = await DockerApi.GetListAsync();
-                var container = list.Find(c => c.Id == Project.DockerId);
-                ProjectState = container.State;
-                ProjectStatus = container.Status;
+                try
+                {
+                    var list = await DockerApi.GetListAsync();
+                    var container = list.Find(c => c.Id == Project.DockerId);
+                    ProjectState = container.State;
+                    ProjectStatus = container.Status;
+                }
+                catch
+                {
+                    ProjectState = "Error";
+                    ProjectStatus = "Docker Error";
+                }
             }
             else
             {

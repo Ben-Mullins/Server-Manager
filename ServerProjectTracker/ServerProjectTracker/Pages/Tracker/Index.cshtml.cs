@@ -29,6 +29,7 @@ namespace ServerProjectTracker.Pages.Tracker
             if (userId == null) return RedirectToPage("/Index");
 
             UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
 

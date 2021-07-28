@@ -26,6 +26,7 @@ namespace ServerProjectTracker.Pages.User
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
             var accessLevel = Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = accessLevel.ToString();
 
             UserId = (int)userId;
 
@@ -47,6 +48,7 @@ namespace ServerProjectTracker.Pages.User
             if (userId == null) return RedirectToPage("/Index");
             var accessLevel = Session.getUserAccess(HttpContext.Session);
             if (accessLevel != 0) return RedirectToPage("/Tracker/Index");
+            ViewData["UserAccess"] = accessLevel.ToString();
 
             var security = new UserLogic(_context);
             security.ElevateAccess(UserId, (int)userId);
@@ -60,6 +62,7 @@ namespace ServerProjectTracker.Pages.User
             if (userId == null) return RedirectToPage("/Index");
             var accessLevel = Session.getUserAccess(HttpContext.Session);
             if (accessLevel != 0) return RedirectToPage("/Tracker/Index");
+            ViewData["UserAccess"] = accessLevel.ToString();
 
             var security = new UserLogic(_context);
             security.ReduceAccess(UserId, (int)userId);
@@ -73,6 +76,7 @@ namespace ServerProjectTracker.Pages.User
             if (userId == null) return RedirectToPage("/Index");
             var accessLevel = Session.getUserAccess(HttpContext.Session);
             if (accessLevel != 0) return RedirectToPage("/Tracker/Index");
+            ViewData["UserAccess"] = accessLevel.ToString();
 
             var security = new UserLogic(_context);
             security.RevokeAccess(UserId, (int)userId);

@@ -53,6 +53,7 @@ namespace ServerProjectTracker.Pages.Tracker
 
             var userAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
             if(userAccessLevel < 0 || userAccessLevel > 3) return RedirectToPage("/Tracker/Index");
+            ViewData["UserAccess"] = userAccessLevel.ToString();
 
             return Page();
         }
@@ -61,6 +62,9 @@ namespace ServerProjectTracker.Pages.Tracker
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
+
+            var accessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = accessLevel.ToString();
 
             var project = _context.Project.FirstOrDefault(p => p.ProjectTitle == ProjectTitle);
             if (project != null)
