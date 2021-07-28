@@ -55,7 +55,8 @@ namespace ServerProjectTracker.Pages.Tracker
             {
                 try
                 {
-                    var list = await DockerApi.GetListAsync();
+                    var dock = new DockerApi();
+                    var list = await dock.GetListAsync();
                     var container = list.Find(c => c.Id == Project.DockerId);
                     ProjectState = container.State;
                     ProjectStatus = container.Status;
