@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\luke\\Documents\\GitHub\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj": {}
+    "C:\\Users\\Cade\\OneDrive\\Desktop\\Summer2021\\Capstone\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\luke\\Documents\\GitHub\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj": {
+    "C:\\Users\\Cade\\OneDrive\\Desktop\\Summer2021\\Capstone\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj",
+        "projectUniqueName": "C:\\Users\\Cade\\OneDrive\\Desktop\\Summer2021\\Capstone\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj",
         "projectName": "ServerProjectTracker",
-        "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj",
-        "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\obj\\",
+        "projectPath": "C:\\Users\\Cade\\OneDrive\\Desktop\\Summer2021\\Capstone\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\ServerProjectTracker.csproj",
+        "packagesPath": "C:\\Users\\Cade\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Cade\\OneDrive\\Desktop\\Summer2021\\Capstone\\Server-Manager\\ServerProjectTracker\\ServerProjectTracker\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cade\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +43,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Docker.DotNet": {
+              "target": "Package",
+              "version": "[3.125.4, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[5.0.6, )"
@@ -77,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

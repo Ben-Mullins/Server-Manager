@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h1>Tracker Dashboard</h1>
         <div class="d-flex justify-content-around">
-            @if(Model.UserAccessLevel < 4 && Model.UserAccessLevel >= 0)
+            @if (Model.UserAccessLevel < 4 && Model.UserAccessLevel >= 0)
             {
                 <div style="padding: 12px">
                     <a class="btn btn-primary" asp-page="/Tracker/CreateProject">Create New Project</a>
@@ -36,8 +36,16 @@
             </div>
         }
     </div>
-    @if(Model.ProjectList.Count == 0)
+    @if (Model.ProjectList.Count == 0)
     {
         <p>It looks like you don't currently have access to any projects right now</p>
+    }
+    @if (Model.UserAccessLevel == 4)
+    {
+        <p>Your access is currently pending</p>
+    }
+    else if (Model.UserAccessLevel > 4)
+    {
+        <p>Your access has been revoked</p>
     }
 </div>

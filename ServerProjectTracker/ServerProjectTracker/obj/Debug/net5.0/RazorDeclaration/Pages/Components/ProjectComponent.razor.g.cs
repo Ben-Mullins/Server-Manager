@@ -20,7 +20,7 @@ namespace ServerProjectTracker.Pages.Components
         }
         #pragma warning restore 1998
 #nullable restore
-#line 28 "C:\Users\luke\Documents\GitHub\Server-Manager\ServerProjectTracker\ServerProjectTracker\Pages\Components\ProjectComponent.razor"
+#line 28 "C:\Users\Cade\OneDrive\Desktop\Summer2021\Capstone\Server-Manager\ServerProjectTracker\ServerProjectTracker\Pages\Components\ProjectComponent.razor"
        
     [Parameter]
     public string Title { get; set; }

@@ -24,6 +24,9 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public string ProjectStatus { get; set; }
 
+        [BindProperty]
+        public string ProjectState { get; set; }
+
         /// <summary>
         /// 0 - Full
         /// 1 - Partial
@@ -32,10 +35,13 @@ namespace ServerProjectTracker.Pages.Tracker
         [BindProperty]
         public int AccessLevel { get; set; }
 
-        public IActionResult OnGet(int ProjectId)
+        public async Task<IActionResult> OnGetAsync(int ProjectId)
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
+
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
             if (Project == null) return RedirectToPage("/Tracker/Index");
@@ -45,8 +51,27 @@ namespace ServerProjectTracker.Pages.Tracker
             AccessLevel = security.DetermineAccessLevel(ProjectId, (int)userId);
             if (AccessLevel > 2) return RedirectToPage("/Tracker/Index");
 
-            //The following data is placeholder, and should be removed once we have actual project data
-            ProjectStatus = "Running";
+            if(Project.DockerId != null)
+            {
+                try
+                {
+                    var dock = new DockerApi();
+                    var list = await dock.GetListAsync();
+                    var container = list.Find(c => c.Id == Project.DockerId);
+                    ProjectState = container.State;
+                    ProjectStatus = container.Status;
+                }
+                catch
+                {
+                    ProjectState = "Error";
+                    ProjectStatus = "Docker Error";
+                }
+            }
+            else
+            {
+                ProjectState = "nocontainer";
+                ProjectStatus = "No Set Docker Container";
+            }
 
             return Page();
         }

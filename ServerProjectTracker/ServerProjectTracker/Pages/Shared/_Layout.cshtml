@@ -19,18 +19,29 @@
         </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
             <div class="nav-row">
-                <div>
+                <div class="d-inline-flex">
                     <a class="navbar-brand" asp-area="" asp-page="/Tracker/Index">Computer Science Project Tracker</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                    @if ((string)ViewData["UserAccess"] == "0")
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex align-items-center">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/User/UserSecurity">Security</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
                 </div>
                 <div class="d-flex">
-                    <form method="post" style="padding-right: 1em">
+                    @*<form method="post" style="padding-right: 1em">
                         <input class="form-control" type="text" placeholder="Search Project..." />
-                    </form>
-                    <a class="btn btn-primary" asp-page="/SignOut">Sign Out</a>
+                    </form>*@
+                    <a class="nav-link" asp-page="/User/EditUser">Profile</a>
+                    <a class="nav-link" asp-page="/SignOut">Sign Out</a>
                 </div>
             </div>
         </nav>

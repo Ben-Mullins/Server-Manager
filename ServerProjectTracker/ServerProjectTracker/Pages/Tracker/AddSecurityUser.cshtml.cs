@@ -43,8 +43,12 @@ namespace ServerProjectTracker.Pages.Tracker
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
 
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
+
             Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
             if (Project == null) return RedirectToPage("/Tracker/Index");
+
 
             ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
 
@@ -58,8 +62,14 @@ namespace ServerProjectTracker.Pages.Tracker
 
         public IActionResult OnGetSearch(int ProjectId, string userSearch)
         {
+            var userId = Session.getUserId(HttpContext.Session);
+            if (userId == null) return RedirectToPage("/Index");
+
             ProjectSecurityLogic security = new ProjectSecurityLogic(_context);
-            var Users = security.GetPotentialNewUsers(ProjectId);
+            var Users = security.GetPotentialNewUsers(ProjectId, (int)userId);
+
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             return new JsonResult(Users);
         }
@@ -68,6 +78,9 @@ namespace ServerProjectTracker.Pages.Tracker
         {
             var userId = Session.getUserId(HttpContext.Session);
             if (userId == null) return RedirectToPage("/Index");
+
+            var UserAccessLevel = (int)Session.getUserAccess(HttpContext.Session);
+            ViewData["UserAccess"] = UserAccessLevel.ToString();
 
             Project = _context.Project.FirstOrDefault(p => p.ProjectId == ProjectId);
             if (Project == null) return RedirectToPage("/Tracker/Index");
@@ -79,7 +92,7 @@ namespace ServerProjectTracker.Pages.Tracker
 
             if (AccessLevel != 0) return RedirectToPage("/Tracker/Details", new { ProjectId });
 
-            var viableUsers = security.GetPotentialNewUsers(ProjectId);
+            var viableUsers = security.GetPotentialNewUsers(ProjectId, (int)userId);
             if(viableUsers.FindIndex(u => u == NewUser) == -1)
             {
                 UserError = "Invalid Username, try again.";
