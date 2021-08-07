@@ -1,0 +1,56 @@
+server {
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+        listen 80;
+        server_name _;
+
+        #location / {
+        #       #try_files $uri $uri/ =404;
+        #}
+
+        location / {
+                proxy_pass http://localhost:6000/;
+        }
+
+        location /chad/ {
+                proxy_pass http://127.0.0.1:9001/;
+                proxy_set_header Accept-Encoding "";
+                sub_filter "href=\"/" "href=\"/chad/";
+                sub_filter_types *;
+                sub_filter_once off;
+        }
+
+        location /brock/ {
+                proxy_pass http://127.0.0.1:9002/;
+                proxy_set_header Accept-Encoding "";
+                sub_filter "href=\"/" "href=\"/brock/";
+                sub_filter_types *;
+                sub_filter_once off;
+        }
+
+        location /lighta/ {
+                proxy_pass http://127.0.0.1:42069/;
+                proxy_set_header Accept-Encoding "";
+                sub_filter "href=\"/" "href=\"/lighta/";
+                sub_filter_types *;
+                sub_filter_once off;
+        }
+
+        location /splunk/ {
+                proxy_pass http://127.0.0.1:9005/;
+                proxy_set_header Accept-Encoding "";
+                sub_filter "href=\"/" "href=\"/splunk/";
+                sub_filter "src=\"/" "src=\"/splunk/";
+                sub_filter_types *;
+                sub_filter_once off;
+        }
+
+        location /testing/ {
+                proxy_pass http://127.0.0.1:6000/;
+                proxy_set_header Accept-Encoding "";
+                sub_filter "href=\"/" "href=\"/testing/";
+                sub_filter_types *;
+                sub_filter_once off;
+        }
+}
