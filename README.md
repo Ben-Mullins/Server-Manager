@@ -1,3 +1,4 @@
+
 # Server Manager
 ### Weber State CS 4450
 
@@ -45,3 +46,61 @@ The <b>sub_fitler</b> is relatively simple, what nginx does with a sub_fitler is
 
 The last 2 things in the location block to note is the sub_filter_types, which is simply to make it apply to all requested files, and the sub_filter_once needs to be off, to ensure that it applies this filter on every request.
 
+### <u>To Do List</u>
+Tier 1
+<ul>
+<li>Ability to pass professor a docker image and have the professor upload it to the Linux server ✓</li>
+<ul><li>Professor will be responsible for setting up Nginx reverse proxy and forwarding correct port from host to container</li></ul>
+<li>Be able to host multiple docker container projects on the same server ✓</li>
+<li>All shared databases installed on Linux server (Currently MSSQL only) ✓</li>
+<li>Role based access for different project databases ✓</li>
+<li>FERPA compliancy ✓</li>
+</ul>
+
+Tier 2
+<ul>
+<li>Automate docker containerization of projects (.NET, React, Java based?/other common web frameworks used by Weber State students/courses)</li>
+<li>Docker API ✓</li>
+<li>Automate project creation/deployment through API</li>
+<li>Automate project deletion through API</li>
+<li>Manage resources used by docker containers (limit usage)</li>
+<li>Manage resources used by databases</li>
+<li>Single DB account per project</li>
+<li>Automate docker port forwarding</li>
+<li>Automate Nginx config for projects</li>
+<li>Automate roles/account assignment for DBs</li>
+<li>Automate project contactless project updating</li>
+<ul><li>Potentially use Github and pull new docker images (github repo monitor)</li></ul>
+<li>Web app display information</li>
+<ul><li>CAS login or SSL</li></ul>
+<li></li>
+</ul>
+
+Tier 3
+<ul>
+<li>Basic login</li>
+<li>Graphs (resource usage)</li>
+<li>Manipulate docker containers from web app</li>
+<li>Manipulate database roles from web app</li>
+<li>Enable/disable from web app</li>
+<li>Student access to web app</li>
+<li>Create, Edit, Delete Projects/containers from web app</li>
+<li>Control resource allocation for each docker container from web app</li>
+<li>Individual DB accounts per user</li>
+<ul><li>Potentially tie to CAS</li></ul>
+</ul>
+
+### <u>Creating A Docker Container From .NET Project</u>
+You will need a DockerHub account to proceed
+<ul>
+<li>Open your solution in Visual Studio</li>
+<li>Right click your project (NOT the solution) in the Solution Explorer</li>
+<li>Select Add > Docker Support</li>
+<ul><li>Visual Studio will download and install Docker Desktop for you, requiring a reboot/li></ul>
+<li>Right click the project after Docker Desktop has installed and is running, and select Publish</li>
+<li>Follow instructions on screen to publish to Docker Hub</li>
+</ul>
+Once your image is published to docker hub, on the server, you can run the command `sudo docker pull yourusername/projectname:latest` to pull the image onto the server.
+
+### <u>Running your Docker Container and Forwarding Ports</u>
+Once you have the docker container on the server, you'll need to be able to run it, and forward from an arbitrary port on the host machine, to port 80 or 443 on the container. To do so, run a command similar to `sudo docker run -d -p 9001:80 yourusername/projectname`, where 9001 is the port on the host machine, and 80 is the port on the container your web app is being served. The -d means you're running it in detached mode, so you can do other things in your terminal, -p sets which port is being forwarded.
