@@ -1,4 +1,3 @@
-
 # Server Manager
 ### Weber State CS 4450
 
@@ -104,3 +103,77 @@ Once your image is published to docker hub, on the server, you can run the comma
 
 ### <u>Running your Docker Container and Forwarding Ports</u>
 Once you have the docker container on the server, you'll need to be able to run it, and forward from an arbitrary port on the host machine, to port 80 or 443 on the container. To do so, run a command similar to `sudo docker run -d -p 9001:80 yourusername/projectname`, where 9001 is the port on the host machine, and 80 is the port on the container your web app is being served. The -d means you're running it in detached mode, so you can do other things in your terminal, -p sets which port is being forwarded. If you have environment variables that need to be set, you can do so with the -e flag
+
+### <u>Microsoft SQL Server</u>
+There is currently a MS SQL Server 2019 Developer edition running on the server.  The reason we chose the  developer edition is that it lets developers build any kind of application on top of SQL Server. It includes all the functionality of Enterprise edition, but is licensed for use as a development and test system, not as a production server.  It was also free this way and it lines up well with what we are using it for.
+
+When a team needs a database on the server what you want to do is create a server for them on the admin account (login information in connecting section).  Then you will need to create a login for them followed by a user.  The user should be tied to the database such that they can only access that database.  Then assign the user to the role 'db_owner' to make them the owner of the database.  If you don't give them a role then they won't be able to do anything on the database.  You can do all of this in a simple C# class that we created, there will also be a link to how to create in the link section.
+
+<b>Connecting to the server</b>
+
+The first thing that you need to do in order to connect to the MS SQL Server is to download weber states vpn and connect to it.  The instructions can be found <a href="https://www.weber.edu/help/kb/VPN_Install.html">here</a> 
+
+Next you will need to setup putty.  To setup putty the first thing you need to do is enter your username followed by “@137.190.18.16” in the Host Name and enter 22 under port.  Then enter a descriptive name under Saved Sessions and click save so you don’t have to enter everything again (Shown Below).
+
+![alt text](https://github.com/Ben-Mullins/Server-Manager/blob/master/Images/ReadmeSQL1.png?raw=true)
+1. Now on the left side of putty there is a Category section. Under Connections you want to hit the “+” next to SSH.
+2. Next click on Tunnels
+3. Under source port enter 4444
+4. Under destinations enter 127.0.0.1:1433
+5. click add
+
+![alt text](https://github.com/Ben-Mullins/Server-Manager/blob/master/Images/ReadmeSQL2.png?raw=true)
+
+Now your putty should look like the image below. Scroll back up in the Category section and click session then click save.
+
+![alt text](https://github.com/Ben-Mullins/Server-Manager/blob/master/Images/ReadmeSQL3.png?raw=true)
+
+Now click the open putty and it will prompt you to enter your password to the server. Enter your password and minimize the window. <b>DO NOT CLOSE IT OR YOU WON’T BE ABLE TO CONNECT TO THE MS SQL SERVER.</b>
+
+The last thing to do is open up Microsoft SQL Server Management Studio, or any other way you would like to connect, and enter the server name as 127.0.0.1,4444 and your login information.  <b>The admin account's username is 'SA' and the password is 'CSWeber!'.</b> (See image below)
+
+![alt text](https://github.com/Ben-Mullins/Server-Manager/blob/master/Images/ReadmeSQL4.png?raw=true)
+
+<b>Commands and Queries</b>
+1. To get the current status of the server run:
+	`systemctl status mssql-server`
+
+2. To stop the server
+`sudo systemctl stop mssql-server`
+
+3. To start the server
+`sudo systemctl start mssql-server`
+
+4. You can run queries in the command line by using 
+`sqlcmd -S localhost -U SA -P CSWeber!`
+Then you should the see a '1>' and you can start entering your queries.  When you are done entering them all just hit enter, type go, and then it will execute them.  Below are some useful queries you can use.
+
+5. To create a new login that will have the user change their password
+`CREATE LOGIN <login_name> WITH PASSWORD = '<enterStrongPasswordHere>' MUST_CHANGE, CHECK_EXPIRATION = ON;`
+
+6. Create a new database
+`CREATE DATABASE <database_name>`
+
+7. Create a user for a database
+`USE <database_name>
+CREATE USER <user_name> FOR LOGIN <login_name>`
+
+8. Make the user the owner of the database
+`USE <database_name> EXEC sp_addrolemember 'db_owner>', '<user_name>'`
+
+<b> Useful Links </b>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15">How to install</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/database-level-roles?view=sql-server-ver15">Database-Level Roles</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-addrolemember-transact-sql?view=sql-server-ver15">Adding Roles</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-security-get-started?view=sql-server-ver15">Security</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlcommand?redirectedfrom=MSDN&view=dotnet-plat-ext-5.0">C# SQL Command Class</a></li>
+</ul>
+
+### <u>Other Databases</u>
+We did look into putting other databases on the server but only ended up putting one on there for now.  One thing to pay attention to if you are going to put more on there is the amount of ram each one takes up.  There is currently only 8GB of ram on the server and each database takes somewhere between 2-4GB to run.  I will provide some useful links below to other database that we researched but didn't put on.
+
+<ul>
+<li><a href="https://likegeeks.com/mysql-on-linux-beginners-tutorial">My SQL</a></li>
+<li><a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/">MongoDB</a></li>
+</ul>
