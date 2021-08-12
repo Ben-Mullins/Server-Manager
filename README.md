@@ -163,7 +163,7 @@ CREATE USER <user_name> FOR LOGIN <login_name>`
 
 ### <u>Docker API</u>
 
-A .NET specific docker API is available for use at <a href="https://github.com/dotnet/Docker.DotNet"</a> which includes instructions for installation and usage. So far in the Server Tracker Project only getting a list of containers has been used. In the future more commands can be implemented to enable the Project to interact completely with the Docker daemon through the application rather than having to use the command line for getting, starting, stopping, and deleting containers/images.
+A .NET specific docker API is available for use at [github.com/dotnet/Docker.DotNet](https://github.com/dotnet/Docker.DotNet) which includes instructions for installation and usage. So far in the Server Tracker Project only getting a list of containers has been used. In the future more commands can be implemented to enable the Project to interact completely with the Docker daemon through the application rather than having to use the command line for getting, starting, stopping, and deleting containers/images.
 
 <b> Useful Links </b>
 <ul>
