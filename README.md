@@ -170,6 +170,11 @@ CREATE USER <user_name> FOR LOGIN <login_name>`
 A .NET specific docker API is available for use at [github.com/dotnet/Docker.DotNet](https://github.com/dotnet/Docker.DotNet) which includes instructions for installation and usage. So far in the Server Tracker Project only getting a list of containers has been used. In the future more commands can be implemented to enable the Project to interact completely with the Docker daemon through the application rather than having to use the command line for getting, starting, stopping, and deleting containers/images.
 
 ### List of Helpful Docker Commands
+**Commands need to be run as root**
+
+`sudo docker ps` :: List all currently running containers
+`sudo docker image ls` :: List all images
+`sudo docker run -it -d -o 9001:80 myusername/myproject:latest` :: runs your project in detatched mode, forwarding the host device's 90001 to the container's port 80
 
 <b> Useful Links </b>
 <ul>
