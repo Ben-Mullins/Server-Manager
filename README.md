@@ -178,6 +178,9 @@ A .NET specific docker API is available for use at [github.com/dotnet/Docker.Dot
 
 `sudo docker run -it -d -o 9001:80 myusername/myproject:latest` :: runs your project in detatched mode, forwarding the host device's 9001 to the container's port 80
 
+`sudo docker kill imageid` :: Kills the image with the ID supplied. ID can be found with sudo docker ps
+
+
 <b> Useful Links </b>
 <ul>
 <li><a href="https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15">How to install</a></li>
