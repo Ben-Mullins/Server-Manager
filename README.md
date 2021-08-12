@@ -4,6 +4,10 @@
 #### <u>*The Purpose*</u>
 The purpose of the Server Manager project is to provide Weber State students a simple way to host their web applications on a publicly accessible server. Weber state has set up the subdomain [csprojects.weber.edu](http://csprojects.weber.edu) to accomplish this purpose, and allocated us a Linux VM to do so.
 
+## START HERE
+
+## Setting Up and Configuring A New Project
+
 #### <u>*Server Tracking Web Application General Information*</u>
 The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). For using the database, the connection string is located in the appsettings.json file located in ServerProjectTracker/SeverProjectTracker. However to manipulate the db it is easiest to ssh into the server and use the command: `/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'EXAMPLE PASSWORD'`  the password for the db is located in PLACEHOLDER on the server. The actual connection string should look like: `"Data Source=127.0.0.1,1433;Initial Catalog=Server_Tracker;User ID=SA;Password=EXAMPLE!"`,  this connection string can only be used while on the server itself, or you must be behind the Weber State Firewall, and must port tunnel using ssh to bind your local port 1433 to the server's port 1433.
 
@@ -164,6 +168,8 @@ CREATE USER <user_name> FOR LOGIN <login_name>`
 ### <u>Docker API</u>
 
 A .NET specific docker API is available for use at [github.com/dotnet/Docker.DotNet](https://github.com/dotnet/Docker.DotNet) which includes instructions for installation and usage. So far in the Server Tracker Project only getting a list of containers has been used. In the future more commands can be implemented to enable the Project to interact completely with the Docker daemon through the application rather than having to use the command line for getting, starting, stopping, and deleting containers/images.
+
+### List of Helpful Docker Commands
 
 <b> Useful Links </b>
 <ul>
