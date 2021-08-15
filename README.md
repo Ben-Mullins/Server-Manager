@@ -37,7 +37,7 @@ location /[appname]/ {
 
 - Run the command `sudo nginx -s reload` to refresh the NGINX configs. Your site should be hosted at http://csprojects.weber.edu/[appname] if everything works correctly.
 
-#### <u>*Server Tracking Web Application General Information*</u>
+## <u>*Server Tracking Web Application General Information*</u>
 The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). For using the database, the connection string is located in the appsettings.json file located in ServerProjectTracker/SeverProjectTracker. However to manipulate the db it is easiest to ssh into the server and use the command: `/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'EXAMPLE PASSWORD'`  the password for the db is located in PLACEHOLDER on the server. The actual connection string should look like: `"Data Source=127.0.0.1,1433;Initial Catalog=Server_Tracker;User ID=SA;Password=EXAMPLE!"`,  this connection string can only be used while on the server itself, or you must be behind the Weber State Firewall, and must port tunnel using ssh to bind your local port 1433 to the server's port 1433.
 
 If you need to update the web app on the server with the latest git push, the source files are located on the server at `/opt/Tracker/Server-Manager/` and all files lower than that directory. All published files are located in `/opt/Tracker/Server-Tracker/`. For security reasons, please do not push the actual db password to the github repository, you may need to stash changes or rewrite the appsettings.json connection string. The basic commands for updating the files will go as follows:
@@ -51,7 +51,7 @@ You should always publish to the Server-Tracker folder, as those files are looke
 
 <b>Our application for now uses a simple unsecure login system, so please do not use a common password. We intended to eventually have this app use Weber State's CAS login system, but were unable to implement it.</b>
 
-#### <u>*Nginx Information*</u>
+## <u>*Nginx Information*</u>
 
 This server makes use of nginx to act as the front facing server for all requests outside of the server, nginx. This is what allows us to host multiple projects. Nginx uses a config file to control most things, for the most part, the only file you really need to manipulate is located at `/etc/nginx/sites-enabled/default`, inside this file (which you must open as root if you want to edit) is the main server block, and all projects are listed as their own location blocks. An example location block looks like the following:
 
@@ -78,8 +78,8 @@ The <b>sub_fitler</b> is relatively simple, what nginx does with a sub_fitler is
 
 The last 2 things in the location block to note is the sub_filter_types, which is simply to make it apply to all requested files, and the sub_filter_once needs to be off, to ensure that it applies this filter on every request.
 
-### <u>To Do List</u>
-Tier 1
+## <u>To Do List</u>
+#### Tier 1
 <ul>
 <li>Ability to pass professor a docker image and have the professor upload it to the Linux server ✓</li>
 <ul><li>Professor will be responsible for setting up Nginx reverse proxy and forwarding correct port from host to container</li></ul>
@@ -89,7 +89,7 @@ Tier 1
 <li>FERPA compliancy ✓</li>
 </ul>
 
-Tier 2
+#### Tier 2
 <ul>
 <li>Automate docker containerization of projects (.NET, React, Java based?/other common web frameworks used by Weber State students/courses)</li>
 <li>Docker API ✓</li>
@@ -109,7 +109,7 @@ Tier 2
 <li></li>
 </ul>
 
-Tier 3
+#### Tier 3
 <ul>
 <li>Basic login</li>
 <li>Graphs (resource usage)</li>
@@ -123,7 +123,7 @@ Tier 3
 <ul><li>Potentially tie to CAS</li></ul>
 </ul>
 
-### <u>Creating A Docker Container From .NET Project</u>
+## <u>Creating A Docker Container From .NET Project</u>
 You will need a DockerHub account to proceed
 <ul>
 <li>Open your solution in Visual Studio</li>
@@ -195,11 +195,11 @@ CREATE USER <user_name> FOR LOGIN <login_name>`
 8. Make the user the owner of the database
 `USE <database_name> EXEC sp_addrolemember 'db_owner>', '<user_name>'`
 
-### <u>Docker API</u>
+## <u>Docker API</u>
 
 A .NET specific docker API is available for use at [github.com/dotnet/Docker.DotNet](https://github.com/dotnet/Docker.DotNet) which includes instructions for installation and usage. So far in the Server Tracker Project only getting a list of containers has been used. In the future more commands can be implemented to enable the Project to interact completely with the Docker daemon through the application rather than having to use the command line for getting, starting, stopping, and deleting containers/images.
 
-### List of Helpful Docker Commands
+## List of Helpful Docker Commands
 **Commands need to be run as root**
 
 `sudo docker ps` :: List all currently running containers
@@ -220,7 +220,7 @@ A .NET specific docker API is available for use at [github.com/dotnet/Docker.Dot
 <li><a href="https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlcommand?redirectedfrom=MSDN&view=dotnet-plat-ext-5.0">C# SQL Command Class</a></li>
 </ul>
 
-### <u>Other Databases</u>
+## <u>Other Databases</u>
 We did look into putting other databases on the server but only ended up putting one on there for now.  One thing to pay attention to if you are going to put more on there is the amount of ram each one takes up.  There is currently only 8GB of ram on the server and each database takes somewhere between 2-4GB to run.  I will provide some useful links below to other database that we researched but didn't put on.
 
 <ul>
