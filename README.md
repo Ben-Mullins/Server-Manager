@@ -21,7 +21,7 @@ The Server Manager project is not running in a docker container. It is running a
 - Use icarus (or connect via VPN) as a jumpbox to the server everything is being hosted on
 - Run your docker container, and make sure to forward from an open port on the host machine to the container's port that the website is on (`sudo docker run -d -p 9001:80 yourusername/projectname`)
 - `cd /etc/nginx/sites-available`
-- Use your favorite text editor (vim/pico) to edit the file named default
+- Use your favorite text editor (vim/pico) to edit the file named default (`/etc/nginx/sites-available/default`)
 - At the bottom of the file, before the last `}`, paste the following, swapping out [appname] with your application name/url, and [port] with the port that is forwarding to your docker container
 
 ```
