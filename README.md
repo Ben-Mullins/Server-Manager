@@ -11,9 +11,15 @@ The interface of the project can be found at http://csprojects.weber.edu, and is
 1. Allow professors to easily manage which docker containers (student projects) are running and how many resources each one takes
 2. Allow students to upload a container, have a professor approve it, and have their project hosted with just a few button clicks
 
-The Server Manager project is not running in a docker container. It is running at `LUKE NEEDS TO INSERT THE FILE PATH HERE********************`. It will be using a Microsoft SQL database to manage which containers are being run as well as help keep track of stats on the container (resource usage over time, technologies used, who owns the project mainly. The docker api can supply a lot of info on the state of the container like uptime and instantaneous resource usage)
+The Server Manager Tracking Web Application is not running in a docker container. The project is located in the following locations:
 
-<bold>You will need to ask Brad to create a user with root privileges for each of you on the server this project is hosted on.</bold>
+- All source files are located in `/opt/Tracker/Server-Manager/`, this folder contains the clone of this repository.
+- Published files are located in `/opt/Tracker/Server-Tracker/`
+- The application is being run with a linux service at `/etc/systemd/system/tracker-app.service`
+
+The aplication makes use of a Microsoft SQL database located on the server, which is used to keep track, of projects and the technology they use, this data is manually entered. You can associate each project with a docker container using it's id, and by using the docker API, you can get information about each container, like it's state and uptime, and although not currently implemented, you can also use the api to allow the application to track resource usage, activate and deactivate containers, etc.
+
+**You will need to ask Brad to create a user with root privileges for each of you on the server this project is hosted on.**
 
 ## Setting Up and Configuring A New Project
 
@@ -38,18 +44,25 @@ location /[appname]/ {
 - Run the command `sudo nginx -s reload` to refresh the NGINX configs. Your site should be hosted at http://csprojects.weber.edu/[appname] if everything works correctly.
 
 ## <u>*Server Tracking Web Application General Information*</u>
-The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). For using the database, the connection string is located in the appsettings.json file located in ServerProjectTracker/SeverProjectTracker. However to manipulate the db it is easiest to ssh into the server and use the command: `/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'EXAMPLE PASSWORD'`  the password for the db is located in PLACEHOLDER on the server. The actual connection string should look like: `"Data Source=127.0.0.1,1433;Initial Catalog=Server_Tracker;User ID=SA;Password=EXAMPLE!"`,  this connection string can only be used while on the server itself, or you must be behind the Weber State Firewall, and must port tunnel using ssh to bind your local port 1433 to the server's port 1433.
+The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). As re reminder, the source files are located on the server at `/opt/Tracker/Server-Manager/`. All published files are located in `/opt/Tracker/Server-Tracker/`.
 
-If you need to update the web app on the server with the latest git push, the source files are located on the server at `/opt/Tracker/Server-Manager/` and all files lower than that directory. All published files are located in `/opt/Tracker/Server-Tracker/`. For security reasons, please do not push the actual db password to the github repository, you may need to stash changes or rewrite the appsettings.json connection string. The basic commands for updating the files will go as follows:
+Using the database is detailed further down. For connecting to the database, the connection string can be found in:
+- From the server at `/opt/Tracker/Server-Manager/ServerProjectTracker/ServerProjectTracker/appsettings.json`
+- From this github repositroy `Server-Manager/ServerProjectTracker/ServerProjectTracker/appsettings.json`. 
+- And the connection string should be `"Data Source=127.0.0.1,1433;Initial Catalog=Server_Tracker;User ID=SA;Password=CSWeber!"`. 
+ 
+**However it should be noted that this connection string will only work when running from on the server itself, or if you are behind the Weber firewall and have an ssh tunnel setup to bind your local port 1433 to the server's port 1433.**
 
-1. `cd /opt/Tracker/Server-manager`
+If you need to update the web app on the server with the latest git push, the following commands can update it:
+
+1. `cd /opt/Tracker/Server-Manager`
 2. `git pull origin master`
 3. `cd /ServerProjectTracker`
 4. `sudo dotnet publish -c Release -o /opt/Tracker/Server-Tracker`
 
 You should always publish to the Server-Tracker folder, as those files are looked at by the associated service for the web application. This service is located at `/etc/systemd/system` and is called `tracker-app.service`. Once you update the files make sure to restart the service by using the command: `sudo systemctl restart tracker-app.service`
 
-<b>Our application for now uses a simple unsecure login system, so please do not use a common password. We intended to eventually have this app use Weber State's CAS login system, but were unable to implement it.</b>
+**Our application for now uses a simple unsecure login system, so please do not use a common password. We intended to eventually have this app use Weber State's CAS login system, but were unable to implement it.**
 
 ## <u>*Nginx Information*</u>
 
@@ -179,7 +192,7 @@ The last thing to do is open up Microsoft SQL Server Management Studio, or any o
 `sudo systemctl start mssql-server`
 
 4. You can run queries in the command line by using 
-`sqlcmd -S localhost -U SA -P CSWeber!`
+`/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'CSWeber!'` 
 Then you should the see a '1>' and you can start entering your queries.  When you are done entering them all just hit enter, type go, and then it will execute them.  Below are some useful queries you can use.
 
 5. To create a new login that will have the user change their password
