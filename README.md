@@ -6,7 +6,36 @@ The purpose of the Server Manager project is to provide Weber State students a s
 
 ## START HERE
 
+The interface of the project can be found at http://csprojects.weber.edu, and is primarily made for two purposes
+
+1. Allow professors to easily manage which docker containers (student projects) are running and how many resources each one takes
+2. Allow students to upload a container, have a professor approve it, and have their project hosted with just a few button clicks
+
+The Server Manager project is not running in a docker container. It is running at `LUKE NEEDS TO INSERT THE FILE PATH HERE********************`. It will be using a Microsoft SQL database to manage which containers are being run as well as help keep track of stats on the container (resource usage over time, technologies used, who owns the project mainly. The docker api can supply a lot of info on the state of the container like uptime and instantaneous resource usage)
+
+<bold>You will need to ask Brad to make you an account on the server this project is hosted on.</bold>
+
 ## Setting Up and Configuring A New Project
+
+- ssh to Icarus or hop on the Weber VPN
+- Use icarus (or connect via VPN) as a jumpbox to the server everything is being hosted on
+- Run your docker container, and make sure to forward from an open port on the host machine to the container's port that the website is on (`sudo docker run -d -p 9001:80 yourusername/projectname`)
+- `cd /etc/nginx/sites-available`
+- Use your favorite text editor (vim/pico) to edit the file named default
+- At the bottom of the file, before the last `}`, paste the following, swapping out [appname] with your application name/url, and [port] with the port that is forwarding to your docker container
+
+```
+location /[appname]/ {
+	proxy_pass http://127.0.0.1:[port]/;
+	proxy_set_header Accept-Encoding "";
+        sub_filter "src=\"/" "src=\"/[appname]/";
+	sub_filter "href=\"/" "href=\"/[appname]/";
+	sub_filter_types *;
+	sub_filter_once off;
+}
+```
+
+- Run the command `sudo nginx -s reload` to refresh the NGINX configs. Your site should be hosted at http://csprojects.weber.edu/[appname] if everything works correctly.
 
 #### <u>*Server Tracking Web Application General Information*</u>
 The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). For using the database, the connection string is located in the appsettings.json file located in ServerProjectTracker/SeverProjectTracker. However to manipulate the db it is easiest to ssh into the server and use the command: `/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'EXAMPLE PASSWORD'`  the password for the db is located in PLACEHOLDER on the server. The actual connection string should look like: `"Data Source=127.0.0.1,1433;Initial Catalog=Server_Tracker;User ID=SA;Password=EXAMPLE!"`,  this connection string can only be used while on the server itself, or you must be behind the Weber State Firewall, and must port tunnel using ssh to bind your local port 1433 to the server's port 1433.
@@ -66,6 +95,7 @@ Tier 2
 <li>Docker API ✓</li>
 <li>Automate project creation/deployment through API</li>
 <li>Automate project deletion through API</li>
+<li>Find way to support HTTPS without warnings</li>
 <li>Manage resources used by docker containers (limit usage)</li>
 <li>Manage resources used by databases</li>
 <li>Single DB account per project</li>
