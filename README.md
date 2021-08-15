@@ -13,7 +13,7 @@ The interface of the project can be found at http://csprojects.weber.edu, and is
 
 The Server Manager project is not running in a docker container. It is running at `LUKE NEEDS TO INSERT THE FILE PATH HERE********************`. It will be using a Microsoft SQL database to manage which containers are being run as well as help keep track of stats on the container (resource usage over time, technologies used, who owns the project mainly. The docker api can supply a lot of info on the state of the container like uptime and instantaneous resource usage)
 
-<bold>You will need to ask Brad to make you an account on the server this project is hosted on.</bold>
+<bold>You will need to ask Brad to create a user with root privileges for each of you on the server this project is hosted on.</bold>
 
 ## Setting Up and Configuring A New Project
 
