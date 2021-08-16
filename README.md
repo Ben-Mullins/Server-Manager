@@ -64,6 +64,40 @@ You should always publish to the Server-Tracker folder, as those files are looke
 
 **Our application for now uses a simple unsecure login system, so please do not use a common password. We intended to eventually have this app use Weber State's CAS login system, but were unable to implement it.**
 
+#### Web Application Detailed Information
+This web application uses Entity framework, which means we have a few model classes that are reflected in the database. Currently the application has the following tables:
+- Users
+- Project
+- ProjectUsers
+- Container
+
+**Users**: Is the simplest class, and is what is used for the simple login system. For now it stores a hashed password (Never store a raw password in a database), and their username. There is a field called "CasId" which was left an ambigious string, as the original intent was to use Weber State's CAS login system, so that field can hold whatever is returned by that system that is needed to connect a user to weber state's system, at which point, their username should probably be equal to their eWeber login username, and the password unneccessary. It also stores their first and last name, but the information is not really used.
+
+The more imporant part to understand in the User Table is the User Access Level, as this determines the overall rights a user has in the web application
+0. Is Global Ownership Access, this means they have full control of **everything**, this should be strictly limited to site admins.
+1. Is Global Developer Access, this means that they can partially modify any project.
+2. Is Global Viewer Access, meaning that they can at least see every project, allowing them to see basic information but no modification rights.
+3. Is Default Access, in other words, their access level is set per individual project.
+4. Is Pending Access, this can be used to approve any new users that login to the system a level 0 admin must approve them access before they can do **anything** on the web app, even if they are added to a specific project.
+5. Is Rejected/Revoked Access, this prevents a user from accessing **anything** on the web app. They will only be able to access something until a level 0 admin returns access.
+
+By default, even if a user has above level 3 access, if their access is better on an individual project, they will get that access level with that project (A level 2 viewer with developer access to a specific project will have developer rights for that project). People with below level 3 access will have no access to any project. Most importantly **NEVER allow a user to modify their own access level**.
+
+**Project**: this table tracks information that is the whole point of the web application. A project contains the title, and description as required fields, all remaining fields are optional. The most important optional field includes the DockerId, which connects a project to the Docker Continer, allowing the web application to manipulate (currently only view) docker containers and their information, like thier current running state and uptime. 
+
+Other optional fields includes the projects programming language (Java, C#, Javascript, etc.), the project's database (MySQL, Microsoft SQL, MongoDB, etc.), Project Backend (ASP.net, React, Django, etc.), and a catch all for any other major technology that they might be using is ProjectTechnologyMisc. The ProjectLink is a url, which can be pointed to the nginx location (http://csprojects.weber.edu/[appname]/), and finally, the ProjectImageLink, which is currently NOT implemented. It was added in case someone might want to add something visual to distinguish each project.
+
+**ProjectUsers**: This table is the link between an individual user and their access rights for a project. Importantly, these access rules track when and who gave the current access level, but it might not be a bad idea to keep track of all access rule changes (including user access level changes) in the future, if neccessary. This is to create accountibility. 
+
+The Access levels for a project are very similar to that of global access levels. but some changes.
+0. Is Owner Access, or full access
+1. Is Developer Access, or partial access, they cannot modify project security (they cannot modify entires on this table)
+2. Is Viewer Access, they can only view basic information but cannot modify anything in anyway.
+
+A notable exception is a negative access level (maybe this should be changed in the future) indicates that access was previously given but has since been revoked. Rather than delete entires this allows you to track if a user might have ever had access in the past, but no longer does, and when.
+
+**Container**: Lastly, the container is not currently on the database, it can be though if a migration is made using the Package Manger Console. It is simply an easy way to transport data from the Docker API to a webpage, but it could be used to track information about a Docker Container, such as possibly it's resource usage history or anything else that might become neccessary.
+
 ## <u>*Nginx Information*</u>
 
 This server makes use of nginx to act as the front facing server for all requests outside of the server, nginx. This is what allows us to host multiple projects. Nginx uses a config file to control most things, for the most part, the only file you really need to manipulate is located at `/etc/nginx/sites-enabled/default`, inside this file (which you must open as root if you want to edit) is the main server block, and all projects are listed as their own location blocks. An example location block looks like the following:
@@ -90,51 +124,6 @@ The <b>sub_fitler</b> is relatively simple, what nginx does with a sub_fitler is
 <b>There are a few caveats with this solution, although unlikely, this solution probably doesn't work with any absolute links. Though we have not gotten to test it. We have not tested it, so we don't know if this will modify javascript files so this may not work with any javascript based front end web applications.</b>
 
 The last 2 things in the location block to note is the sub_filter_types, which is simply to make it apply to all requested files, and the sub_filter_once needs to be off, to ensure that it applies this filter on every request.
-
-## <u>To Do List</u>
-#### Tier 1
-<ul>
-<li>Ability to pass professor a docker image and have the professor upload it to the Linux server ✓</li>
-<ul><li>Professor will be responsible for setting up Nginx reverse proxy and forwarding correct port from host to container</li></ul>
-<li>Be able to host multiple docker container projects on the same server ✓</li>
-<li>All shared databases installed on Linux server (Currently MSSQL only) ✓</li>
-<li>Role based access for different project databases ✓</li>
-<li>FERPA compliancy ✓</li>
-</ul>
-
-#### Tier 2
-<ul>
-<li>Automate docker containerization of projects (.NET, React, Java based?/other common web frameworks used by Weber State students/courses)</li>
-<li>Docker API ✓</li>
-<li>Automate project creation/deployment through API</li>
-<li>Automate project deletion through API</li>
-<li>Find way to support HTTPS without warnings</li>
-<li>Manage resources used by docker containers (limit usage)</li>
-<li>Manage resources used by databases</li>
-<li>Single DB account per project</li>
-<li>Automate docker port forwarding</li>
-<li>Automate Nginx config for projects</li>
-<li>Automate roles/account assignment for DBs</li>
-<li>Automate project contactless project updating</li>
-<ul><li>Potentially use Github and pull new docker images (github repo monitor)</li></ul>
-<li>Web app display information</li>
-<ul><li>CAS login or SSL</li></ul>
-<li></li>
-</ul>
-
-#### Tier 3
-<ul>
-<li>Basic login</li>
-<li>Graphs (resource usage)</li>
-<li>Manipulate docker containers from web app</li>
-<li>Manipulate database roles from web app</li>
-<li>Enable/disable from web app</li>
-<li>Student access to web app</li>
-<li>Create, Edit, Delete Projects/containers from web app</li>
-<li>Control resource allocation for each docker container from web app</li>
-<li>Individual DB accounts per user</li>
-<ul><li>Potentially tie to CAS</li></ul>
-</ul>
 
 ## <u>Creating A Docker Container From .NET Project</u>
 You will need a DockerHub account to proceed
@@ -223,8 +212,56 @@ A .NET specific docker API is available for use at [github.com/dotnet/Docker.Dot
 
 `sudo docker kill imageid` :: Kills the image with the ID supplied. ID can be found with sudo docker ps
 
+## <u>To Do List</u>
+#### Tier 1
+<ul>
+<li>Ability to pass professor a docker image and have the professor upload it to the Linux server ✓</li>
+<ul><li>Professor will be responsible for setting up Nginx reverse proxy and forwarding correct port from host to container</li></ul>
+<li>Be able to host multiple docker container projects on the same server ✓</li>
+<li>All shared databases installed on Linux server (Currently MSSQL only) ✓</li>
+<li>Role based access for different project databases ✓</li>
+<li>FERPA compliancy ✓</li>
+</ul>
 
-<b> Useful Links </b>
+#### Tier 2
+<ul>
+<li>Automate docker containerization of projects (.NET, React, Java based?/other common web frameworks used by Weber State students/courses)</li>
+<li>Docker API ✓</li>
+<li>Automate project creation/deployment through API</li>
+<li>Automate project deletion through API</li>
+<li>Find way to support HTTPS without warnings</li>
+<li>Manage resources used by docker containers (limit usage)</li>
+<li>Manage resources used by databases</li>
+<li>Single DB account per project</li>
+<li>Automate docker port forwarding</li>
+<li>Automate Nginx config for projects</li>
+<li>Automate roles/account assignment for DBs</li>
+<li>Automate project contactless project updating</li>
+<ul><li>Potentially use Github and pull new docker images (github repo monitor)</li></ul>
+<li>Web app display information</li>
+<ul><li>CAS login or SSL</li></ul>
+<li></li>
+</ul>
+
+#### Tier 3
+<ul>
+<li>Basic login</li>
+<li>Graphs (resource usage)</li>
+<li>Manipulate docker containers from web app</li>
+<li>Manipulate database roles from web app</li>
+<li>Enable/disable from web app</li>
+<li>Student access to web app</li>
+<li>Create, Edit, Delete Projects/containers from web app</li>
+<li>Control resource allocation for each docker container from web app</li>
+<li>Individual DB accounts per user</li>
+<ul><li>Potentially tie to CAS</li></ul>
+</ul>
+
+## CURRENT KNOWN ISSUES
+- Currently Subfilter is not a sufficient solution for all issues on hosting a multi-page web application, it does not handle redirects. A solution for handling redirects properly needs to be found.
+- The web application probably shouldn't use the user access level in cache, in case it ever changes while they are still logged in
+
+## Useful Links
 <ul>
 <li><a href="https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15">How to install</a></li>
 <li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/security/authentication-access/database-level-roles?view=sql-server-ver15">Database-Level Roles</a></li>
