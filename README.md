@@ -74,12 +74,12 @@ This web application uses Entity framework, which means we have a few model clas
 **Users**: Is the simplest class, and is what is used for the simple login system. For now it stores a hashed password (Never store a raw password in a database), and their username. There is a field called "CasId" which was left an ambigious string, as the original intent was to use Weber State's CAS login system, so that field can hold whatever is returned by that system that is needed to connect a user to weber state's system, at which point, their username should probably be equal to their eWeber login username, and the password unneccessary. It also stores their first and last name, but the information is not really used.
 
 The more imporant part to understand in the User Table is the User Access Level, as this determines the overall rights a user has in the web application
-0. Is Global Ownership Access, this means they have full control of **everything**, this should be strictly limited to site admins.
-1. Is Global Developer Access, this means that they can partially modify any project.
-2. Is Global Viewer Access, meaning that they can at least see every project, allowing them to see basic information but no modification rights.
-3. Is Default Access, in other words, their access level is set per individual project.
-4. Is Pending Access, this can be used to approve any new users that login to the system a level 0 admin must approve them access before they can do **anything** on the web app, even if they are added to a specific project.
-5. Is Rejected/Revoked Access, this prevents a user from accessing **anything** on the web app. They will only be able to access something until a level 0 admin returns access.
+- Level 0: Is Global Ownership Access, this means they have full control of **everything**, this should be strictly limited to site admins.
+- Level 1: Is Global Developer Access, this means that they can partially modify any project.
+- Level 2: Is Global Viewer Access, meaning that they can at least see every project, allowing them to see basic information but no modification rights.
+- Level 3: Is Default Access, in other words, their access level is set per individual project.
+- Level 4: Is Pending Access, this can be used to approve any new users that login to the system a level 0 admin must approve them access before they can do **anything** on the web app, even if they are added to a specific project.
+- Level 5: Is Rejected/Revoked Access, this prevents a user from accessing **anything** on the web app. They will only be able to access something until a level 0 admin returns access.
 
 By default, even if a user has above level 3 access, if their access is better on an individual project, they will get that access level with that project (A level 2 viewer with developer access to a specific project will have developer rights for that project). People with below level 3 access will have no access to any project. Most importantly **NEVER allow a user to modify their own access level**.
 
@@ -90,9 +90,9 @@ Other optional fields includes the projects programming language (Java, C#, Java
 **ProjectUsers**: This table is the link between an individual user and their access rights for a project. Importantly, these access rules track when and who gave the current access level, but it might not be a bad idea to keep track of all access rule changes (including user access level changes) in the future, if neccessary. This is to create accountibility. 
 
 The Access levels for a project are very similar to that of global access levels. but some changes.
-0. Is Owner Access, or full access
-1. Is Developer Access, or partial access, they cannot modify project security (they cannot modify entires on this table)
-2. Is Viewer Access, they can only view basic information but cannot modify anything in anyway.
+- Level 0: Is Owner Access, or full access
+- Level 1: Is Developer Access, or partial access, they cannot modify project security (they cannot modify entires on this table)
+- Level 2: Is Viewer Access, they can only view basic information but cannot modify anything in anyway.
 
 A notable exception is a negative access level (maybe this should be changed in the future) indicates that access was previously given but has since been revoked. Rather than delete entires this allows you to track if a user might have ever had access in the past, but no longer does, and when.
 
