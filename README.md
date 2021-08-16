@@ -17,7 +17,7 @@ The Server Manager Tracking Web Application is not running in a docker container
 - Published files are located in `/opt/Tracker/Server-Tracker/`
 - The application is being run with a linux service at `/etc/systemd/system/tracker-app.service`
 
-The aplication makes use of a Microsoft SQL database located on the server, which is used to keep track, of projects and the technology they use, this data is manually entered. You can associate each project with a docker container using it's id, and by using the docker API, you can get information about each container, like it's state and uptime, and although not currently implemented, you can also use the api to allow the application to track resource usage, activate and deactivate containers, etc.
+The application makes use of a Microsoft SQL database located on the server, which is used to keep track of projects and the technology they use. This data is manually entered when uploading a new project. You can associate each project with a docker container using it's id, and by using the docker API, you can get information about each container, like it's state and uptime, and although not currently implemented, you can also use the api to allow the application to track resource usage, activate and deactivate containers, etc.
 
 **You will need to ask Brad to create a user with root privileges for each of you on the server this project is hosted on.**
 
