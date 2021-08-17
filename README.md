@@ -43,6 +43,11 @@ location /[appname]/ {
 
 - Run the command `sudo nginx -s reload` to refresh the NGINX configs. Your site should be hosted at http://csprojects.weber.edu/[appname] if everything works correctly.
 
+## CURRENT KNOWN ISSUES
+- Currently Subfilter is not a sufficient solution for all issues on hosting a multi-page web application, it does not handle redirects. A solution for handling redirects properly needs to be found.
+- The web application probably shouldn't use the user access level in cache, in case it ever changes while they are still logged in
+- SSL/HTTPS may not work without giving warnings
+
 ## <u>*Server Tracking Web Application General Information*</u>
 The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). As re reminder, the source files are located on the server at `/opt/Tracker/Server-Manager/`. All published files are located in `/opt/Tracker/Server-Tracker/`.
 
@@ -256,10 +261,6 @@ A .NET specific docker API is available for use at [github.com/dotnet/Docker.Dot
 <li>Individual DB accounts per user</li>
 <ul><li>Potentially tie to CAS</li></ul>
 </ul>
-
-## CURRENT KNOWN ISSUES
-- Currently Subfilter is not a sufficient solution for all issues on hosting a multi-page web application, it does not handle redirects. A solution for handling redirects properly needs to be found.
-- The web application probably shouldn't use the user access level in cache, in case it ever changes while they are still logged in
 
 ## Useful Links
 <ul>
