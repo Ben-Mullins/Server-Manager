@@ -48,6 +48,8 @@ location /[appname]/ {
 - The web application probably shouldn't use the user access level in cache, in case it ever changes while they are still logged in
 - SSL/HTTPS may not work without giving warnings
 
+[What to do next](https://github.com/Ben-Mullins/Server-Manager/blob/master/README.md#to-do-list)
+
 ## <u>*Server Tracking Web Application General Information*</u>
 The Server Project Tracker Application is a .NET Core 5.0 ASP.net Razor application and uses Entity Framework Core (the standard for .NET). As re reminder, the source files are located on the server at `/opt/Tracker/Server-Manager/`. All published files are located in `/opt/Tracker/Server-Tracker/`.
 
@@ -250,7 +252,7 @@ A .NET specific docker API is available for use at [github.com/dotnet/Docker.Dot
 
 #### Tier 3
 <ul>
-<li>Basic login</li>
+<li>Basic login ✓</li>
 <li>Graphs (resource usage)</li>
 <li>Manipulate docker containers from web app</li>
 <li>Manipulate database roles from web app</li>
